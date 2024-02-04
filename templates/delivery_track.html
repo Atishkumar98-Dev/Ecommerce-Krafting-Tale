@@ -1,0 +1,54 @@
+{% extends 'root.html' %}
+{% load static %}
+{% block content %}
+<style>
+    span img {
+        width: 30%;
+    }
+
+    .card {
+        margin-top: 20px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+
+    .card-header {
+        background-color: #343a40;
+        color: white;
+        
+    }
+    .img-thumbnail{
+        /* box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px; */
+        border: none;
+        margin: 5%;
+    }
+</style>
+
+<div class="container mb-5">
+    {% for order in full_order_details %}
+        <div class="card">
+            <div class="card-header">
+                {% for order_deliver in order_delivery %}
+                    {% if order_deliver.order == order and order_deliver.status == 'In Progress' %}
+                        Delivery Status: {{ order_deliver.status }}<br>
+                        Delivery Track note: {{ order_deliver.notes }}<br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">Order #{{ order.id }} - Transaction Status: {{ order.status }} - Total Price: ₹ {{ order.total_price }}</h5>
+                {% for item in order.orderitem_set.all %}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail"><br>
+                            Product: {{ item.product_variant.name }}<br>
+                            Quantity: {{ item.quantity }}<br>
+                            Price: ₹ {{ item.product_variant.price }}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}

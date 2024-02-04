@@ -1,0 +1,43 @@
+{% extends 'root.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .card{
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+        border: none;
+        transition: ease-in-out .45s;
+       
+    }
+
+    .card:hover{
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+<div class="container mt-5">
+    <h1 class="mb-4">Orders to Deliver Today</h1>
+
+    <div class="row">
+        {% for order in all_order %}
+        {% if order.status != 'Pending' and order.delivery_status != 'Completed' %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Order #{{ order.id }}</h5>
+                        <p class="card-text">Status: {{ order.status }}</p>
+                        <p class="card-text">Delivery Status: {{ order.delivery_status }}</p>
+                        <!-- Add other order details as needed -->
+
+                        <!-- Example: View order details button -->
+                        <a href="{% url 'update_delivery' order_id=order.id %}" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+</div>
+
+{% endblock content %}

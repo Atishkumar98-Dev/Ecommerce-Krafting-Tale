@@ -1,0 +1,258 @@
+{% extends 'root.html' %} {% load static %} {% block content %}
+
+<style>
+</style>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+  .container1 {
+    max-width: 100%;
+    min-height: auto;
+    margin-left: 170px;
+    display: flex;
+    flex-direction: column;
+  }
+  .Main_cards_section{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+  body{
+    /* background-image:linear-gradient(-180deg,rgb(68, 136, 224),rgb(84, 163, 212)); */
+    color: black;
+    background-color: #EEF5FF;
+
+  }
+  .card{
+    height: 25vh;
+    width: 30%;
+    font-family: "Exo 2", sans-serif;
+    border-radius: 15px;
+    margin: 1%;
+    /* background:transparent; */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    /* background-color: aliceblue; */
+  }
+
+  #chart-container {
+            width: 100%;
+            margin: auto;
+            padding: 20px;
+        }
+
+
+        @media only screen and (max-width: 767px) {
+          .card{
+    height: 100%;
+    width: 100%;
+  }
+  .Main_cards_section{
+    flex-direction: column;
+  }
+  #myChart{
+    width: 100%  !important;
+    height: auto !important;
+  }
+    }
+</style>
+<div class="container1 m-5">
+  <h1 class="font-medium leading-tight text-5xl mt-0 mb-2"style='color:#176B87; font-size: xxx-large;font-family: "Exo 2", sans-serif;'>
+    Dashboard
+  </h1>
+<div class="Main_cards_section">
+  <div class="card p-5 m-5">
+    <h3 style="color: #176B87 !important; font-size: xxx-large;font-family: 'Exo 2', sans-serif;">
+      <i class='bx bxs-user mt-3' style="font-size: xx-large;" ></i> No of Users 
+  </h3>
+  <p>
+    <h2 style="color: #176B87 !important; font-size: xx-large;">
+      {{cust_count}}
+    </h2>
+  </p>
+</div>
+<div class="card p-5 m-5">
+  <h3 style="color: #176B87  !important; font-size: xxx-large;font-family: 'Exo 2', sans-serif;">
+    <i class='bx bxs-package mt-3' style="font-size: xx-large;" ></i> No of Orders
+</h3>
+<p>
+  <h2 style="color: #176B87  !important; font-size: xx-large;">
+    {{ord_count}}
+  </h2>
+</p>
+</div>
+<div class="card p-5 m-5">
+  <h3 style="color: #176B87  !important; font-size: xxx-large;font-family: 'Exo 2', sans-serif;">
+    <i class='bx bxs-shopping-bag mt-3' style="font-size: xx-large;" ></i> No of Products
+</h3>
+<p>
+  <h2 style="color: #176B87 !important; font-size: xx-large;">
+    {{prod_count}}
+  </h2>
+</p>
+</div>
+</div>
+
+<!-- <h2 class = 'mt-5'style="color: #176B87  !important;text-align: center; font-size: xx-large;font-family: 'Exo 2', sans-serif;">
+  Product Chart
+</h2>
+<div id="chart-container">
+  <canvas id="myChart"></canvas>
+</div> -->
+
+<h2 class = 'mt-5'style="color: #176B87  !important;text-align: center; font-size: xx-large;font-family: 'Exo 2', sans-serif;">
+  User Details
+</h2>
+<table class="">
+  <thead class="">
+    <tr>
+      <th
+        scope="col"
+        class="text-sm font-medium text-white-900 px-5 py-4 text-left"
+      >
+        ID
+      </th>
+      <th
+        scope="col"
+        class="text-sm font-medium text-white-900 px-6 py-4 text-left"
+      >
+        User
+      </th>
+     
+      <th
+        scope="col"
+        class="text-sm font-medium text-white-900 px-6 py-4 text-left"
+      >
+       Staff
+      </th>
+      <th
+        scope="col"
+        class="text-sm font-medium text-white-900 px-6 py-4 text-left"
+      >
+        SuperUser
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cust in name %}
+    <tr class="bg-dark text-light p-5">
+      <td
+        class="px-5 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+      >
+        {{cust.id}}
+      </td>
+      <td
+        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+      >
+        {{cust.user}}
+      </td>
+      <td
+        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+      >
+      {% if cust.user.is_staff %}
+      <i class='bx bx-check-double' ></i>
+      {% else %}
+      <i class='bx bxs-x-circle' ></i>
+      {% endif %}
+      </td>
+      <td
+        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+      >
+      {% if cust.user.is_superuser %}
+      <i class='bx bx-check-double' ></i>
+      {% else %}
+      <i class='bx bxs-x-circle' ></i>
+      {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<div class="for_map mt-5">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d942.3718016784142!2d72.8222683!3d19.1301393!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b61ebb5aaebb%3A0x913e89bf8d7e7dd7!2sSwapna%20Sakar%20Society%2C%20Mudran%20Press%20Colony%2C%20Andheri%20West%2C%20Mumbai%2C%20Maharashtra%20400061!5e0!3m2!1sen!2sin!4v1705850872905!5m2!1sen!2sin" width="400" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+        
+        <!-- Required chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Chart bar -->
+      
+
+        <!-- Required chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Chart line -->
+   
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+//  var x = {{ x | safe }};
+// var y = {{ y | safe }};
+
+// // Define an array of colors for each section of the pie chart
+// var colors = ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)' ,];
+
+// // Create a bar chart using Chart.js
+// var ctx = document.getElementById('myChart').getContext('2d');
+// var myChart = new Chart(ctx, {
+//     type: 'line',
+//     data: {
+//         labels: x,
+//         datasets: [{
+//             label: 'Product Prices',
+//             data: y,
+//             backgroundColor: colors, // Use the array of colors
+//             borderColor: 'rgba(75, 192, 192, 1)', // Adjust the color as needed
+//             borderWidth: 1,
+//             barPercentage: 0.9,
+//             categoryPercentage: 0.5
+//         }]
+//     },
+//     options: {
+//         scales: {
+//             y: {
+//                 beginAtZero: true,
+//                 title: {
+//                     display: true,
+//                     text: 'Price in INR'
+//                 }
+//             }
+//         },
+//         plugins: {
+//             legend: {
+//                 display: true,
+//                 position: 'bottom',
+//                 title: {
+//                     display: true,
+//                     text: 'Products',
+//                     padding: 20, // Adjust padding as needed
+//                     color: 'rgba(255, 99, 132, 1)' // Adjust color as needed
+//                 }
+//             }
+//         },
+//         layout: {
+//             padding: {
+//                 left: 20,
+//                 right: 20,
+//                 top: 20,
+//                 bottom: 20
+//             },
+//             backgroundColor: 'rgba(240, 240, 240, 0.8)' // Adjust the background color as needed
+//         }
+//     }
+// });
+
+
+</script>
+
+{% endblock content%}

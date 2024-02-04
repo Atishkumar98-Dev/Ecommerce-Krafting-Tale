@@ -1,0 +1,90 @@
+{% extends 'root.html' %} 
+{% load static %} 
+{% block content %}
+
+<style>
+    .list-group-item .d-flex{
+        width: 50%;
+        border: none !important;
+    }
+    span img {
+        width: 30%;
+        border: none;
+    }
+    .card .list-group-item .img-thumbnail  {
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+        border: none !important;
+        transition: ease-in-out .45s;
+       
+    }
+    .list-group-item{
+        border: none !important;
+
+    }
+    .card:hover .list-group-item .img-thumbnail {
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        border: none !important;
+        cursor: pointer;
+    }
+</style>
+<div class="container mt-4 mb-5">
+    <h2>Your Orders</h2>
+    
+    {% for order in user_orders %}
+    <div class="card mb-4 mt-5">
+        <div class="card-header  {% if order.delivery_status == 'In Progress' or order.delivery_status == 'Pending' %} bg-warning text-dark {% else %}  bg-success text-white {% endif %} ">
+            Order #{{ order.id }} | Transaction Status: {{ order.status }} | Delivery Status : {{ order.delivery_status }} | Total Price: ₹ {{ order.total_price }}
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for item in order.orderitem_set.all %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail"><br>
+                                <hr>
+                                Product: {{ item.product_variant.name }}
+                                <br>
+                                Quantity: {{ item.quantity }}
+                                <br>
+                                Price: ₹ {{ item.product_variant.price }}
+                            </span>
+                            
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="pagination mt-4">
+        <ul class="pagination">
+            {% if user_orders.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link" aria-label="First">&laquo;&laquo;</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ user_orders.previous_page_number }}" class="page-link" aria-label="Previous">&laquo;</a>
+                </li>
+            {% endif %}
+    
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page {{ user_orders.number }} of {{ user_orders.paginator.num_pages }}.
+                </span>
+            </li>
+    
+            {% if user_orders.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ user_orders.next_page_number }}" class="page-link" aria-label="Next">&raquo;</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ user_orders.paginator.num_pages }}" class="page-link" aria-label="Last">&raquo;&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+   
+</div>
+{% endblock content %}

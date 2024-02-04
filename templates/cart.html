@@ -1,0 +1,133 @@
+{% extends 'root.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cart | Deal Bazar{% endblock %}</title>
+    <!-- Link Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bg-light {
+            background-color: rgb(152, 175, 218) !important;
+        }
+
+        .cart_main  {
+            background-color: rgb(152, 175, 218);
+            padding: 4%;
+            width: 100% !important;
+            border-radius: 8px;
+            box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        }
+
+        .cart-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card{
+            padding: 4%;
+            border: none;
+        }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .btn-proceed-to-checkout {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        td img {
+            width: 180px;
+            height: auto;
+        }
+        .img-thumbnail{
+            border: none;
+            width: 120px;
+        }
+        .table ,th ,td,tr, thead {
+            border: none;
+            padding: 5%;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container-fluid cart_main mt-5">
+
+        <div class="card">
+
+        
+        <div class="cart-title">
+            <h1 class="mb-4"><i class='bx bxs-cart-alt' style="font-size: xx-large;"></i> Your Cart</h1>
+        </div>
+
+        {% if order_items %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Product image</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td><img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail"></td>
+                            <td>{{ item.product_variant.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹ {{ item.product_variant.price }}</td>
+                            <td>₹ {{ item.product_variant.price | floatformat:"2" }}</td>
+                            <td class="cart-actions">
+                                <form method="POST" action="{% url 'reduce_quantity' item.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">-</button>
+                                </form>
+                                <span class="mx-2">{{ item.quantity }}</span>
+                                <form method="POST" action="{% url 'increase_quantity' item.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-success btn-sm  mx-1">+</button>
+                                </form>
+                                <form method="POST" action="{% url 'remove_from_cart' item.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm mx-2"><i class='bx bxs-trash-alt'></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p class="lead cart-total">Total Price: ₹ {{ total_price }}</p>
+            <a href="{% url 'checkout' %}" class="btn btn-proceed-to-checkout">Proceed to Checkout</a>
+
+        {% else %}
+            <p class="lead">Your cart is empty.</p>
+        {% endif %}
+    </div>
+</div>
+    </div>
+
+    <!-- Link Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+{% endblock content %}
