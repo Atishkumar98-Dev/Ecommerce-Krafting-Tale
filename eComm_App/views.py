@@ -383,7 +383,6 @@ def successMsg(request):
 def delivery_track(request):
     user = request.user.id
     full_order_details = []
-    print(user)
     order_delivery = Delivery.objects.filter(user_id=user, status='In Progress')
 
     for check_d in order_delivery:
