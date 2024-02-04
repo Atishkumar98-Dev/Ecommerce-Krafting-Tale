@@ -699,14 +699,19 @@ body{
 
 }
     /* Media query for laptops and larger screens */
-    @media only screen and (min-width: 768px) {}
+    @media only screen and (min-width: 768px) {
 
+      
+    }
     /* Media query for mobile devices */
     @media only screen and (max-width: 767px) {
-        .grid_prod {
-            grid-template-columns: 1fr;
-        }
-
+      .grid_prod {
+        grid-template-columns: 1fr;
+      }
+      
+      .pack_of_products{
+        display: none !important;
+      }
         .card {
             height: auto;
         }
@@ -855,7 +860,7 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
                         <li class="page-item active">
                             <span class="page-link">{{ num }}</span>
                         </li>
-                    {% elif num > products.number|add:'-13' and num < products.number|add:'13' %}
+                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
                         <li class="page-item">
                             <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                         </li>
