@@ -37,17 +37,26 @@
     </symbol>
   </svg>
   <div class="bg-dark text-light">
-    {% if messages_to_display %}
-    {% for message in messages_to_display %}
-      {% if message.tags %} 
+    {% if messages %}
+    {% for message in messages %}
+      {% if message.tags %}
+        {% if message.tags == "auto-remove" %}
+          <!-- Add a JavaScript function to automatically close the alert after a delay -->
+          <script>
+            setTimeout(function() {
+              $('.alert').alert('close');
+            }, 500);  // Adjust the delay (in milliseconds) as needed
+          </script>
+        {% endif %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       {% endif %}
-      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
     {% endfor %}
   {% endif %}
+  
   
 
 <div class="container p-5 ">

@@ -64,7 +64,6 @@ def upload_csv(request):
                     sub_category = None
                 image_url = row['image']
                 if not is_url_accessible(image_url):
-                    print(f"Skipping product '{row['name']}' due to inaccessible image URL")
                     continue
                 Product.objects.create(
                     name=row['name'],
@@ -361,8 +360,6 @@ def successMsg(request):
     order_id = request.GET.get('razorpay_order_id')
     signatuter_id = request.GET.get('razorpay_signature')
     razorpay_payment_id = request.GET.get('razorpay_payment_id')
-
-    print(order_id,signatuter_id,razorpay_payment_id,"ALL")
     Update_order = Order.objects.get(transaction_id=order_id)
     Update_order.transaction_id = signatuter_id
     Update_order.status = 'Paid'
@@ -371,11 +368,6 @@ def successMsg(request):
     Update_order.save()
     Delivery_order = Delivery.objects.create(order_id=Update_order.id,user_id=request.user.id,status='In Progress')
     Delivery_order.save()
-
-    print(signatuter_id)
-    print(order_id)
-    print(razorpay_payment_id)
-            
     return render(request, 'success.html',)
 
 
@@ -410,18 +402,14 @@ def All_order(request):
 @login_required(login_url='/login/')
 def delivery_status_update(request, order_id):
     delivery = get_object_or_404(Delivery, order__id=order_id)
-    print(delivery.user.customer.id)
-
     if request.method == 'POST':
         status = request.POST.get('status')
-        print(status)
         form = DeliveryForm(request.POST, instance=delivery)
         if form.is_valid():
             order_update_for_delivery = Order.objects.get(id=order_id,customer_id=delivery.user.customer.id,status='Paid',delivery_status='In Progress')
             if status == 'Completed':
                 order_update_for_delivery.delivery_status = 'Completed'
                 order_update_for_delivery.save()
-            print('test')
             form.save()
             # Redirect to a success page or URL
             return redirect('/all_orders_details/')  # Update with your success URL name
@@ -466,10 +454,8 @@ def profile(request):
         profile = user.customer  # Adjust this according to your model structure
         if 'photo' in request.FILES:
             photo = request.FILES['photo']
-            print(photo)
             fs = FileSystemStorage()
             filename = fs.save(photo.name, photo)
-            print(fs.url(filename),'filename')
             profile.photo = fs.url(filename)
             profile.save()
         # Update the profile fields
@@ -485,7 +471,7 @@ def profile(request):
 
         # Save the changes
         profile.save()
-
+        messages.success(request, 'Profile updated successfully.')
         return redirect('profile')  # Redirect to the profile page or any other desired page after successful update
 
     else:
@@ -494,13 +480,11 @@ def profile(request):
         # Assuming you have a one-to-one relationship between User and Customer
         user = request.user
         profile = user.customer  # Adjust this according to your model structure
-        messages.success(request, 'Profile updated successfully.')
-        messages_to_display = messages.get_messages(request)
 
     context = {
         'state_choices': state_choices,
         'profile': profile,
-        'messages_to_display':messages_to_display
+       
     }
 
 
