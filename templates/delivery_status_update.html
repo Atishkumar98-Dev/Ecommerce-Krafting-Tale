@@ -3,8 +3,56 @@
 {% block title %}Update Delivery{% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <h1 class="mb-4">Update Delivery for Order #{{ order_id }}</h1>
+<style>
+  #id_status {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #f1f1f1;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+  border-radius: 5px;
+}
+/* Style the select dropdown arrow */
+#id_status::-ms-expand {
+  display: none;
+}
+
+#id_status::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Change color of dropdown options on hover */
+#id_status option:hover {
+  background-color: #ddd;
+}
+
+/* Change color of dropdown options on selection */
+#id_status option:checked {
+  background-color: #b3d4fc;
+}
+#id_address{
+  background-color: #f1f1f1;
+}
+textarea {
+    resize: vertical;
+    background-color: #f1f1f1;
+    border-radius: 16px;
+    padding: 3%;
+    height: 13vh;
+    color: black;
+    border: none;
+}
+</style>
+<div class="container mt-5">
+  <h1 class="mb-4">Update Delivery for Order #{{ order_id }}</h1>
 
     <form method="post" action="{% url 'update_delivery' order_id=order_id %}" class="col-md-6">
       {% csrf_token %}
@@ -25,7 +73,7 @@
         {{ form.notes }}
       </div>
 
-      <button type="submit" class="btn btn-primary">Update Delivery</button>
+      <button type="submit" class="btn btn-outline-secondary">Update Delivery</button>
     </form>
   </div>
 {% endblock %}

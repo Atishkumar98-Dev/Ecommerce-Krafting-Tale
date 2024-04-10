@@ -11,6 +11,12 @@
         width: 30%;
         border: none;
     }
+    .card{
+        border: none !important;
+    }
+    .card-header{
+        border: none;
+    }
     .card .list-group-item .img-thumbnail  {
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
         border: none !important;
@@ -20,6 +26,12 @@
     .list-group-item{
         border: none !important;
 
+    }
+    .bg-warning{
+        background-color: #FFF2CC !important;
+    }
+    .bg-success{
+        background-color: #9FC088 !important;
     }
     .card:hover .list-group-item .img-thumbnail {
         box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -32,7 +44,7 @@
     
     {% for order in user_orders %}
     <div class="card mb-4 mt-5">
-        <div class="card-header  {% if order.delivery_status == 'In Progress' or order.delivery_status == 'Pending' %} bg-warning text-dark {% else %}  bg-success text-white {% endif %} ">
+        <div class="card-header  {% if order.delivery_status == 'In Progress' or order.delivery_status == 'Pending' %} bg-warning text-dark {% else %}  bg-success text-dark {% endif %} ">
             Order #{{ order.id }} | Transaction Status: {{ order.status }} | Delivery Status : {{ order.delivery_status }} | Total Price: ₹ {{ order.total_price }}
         </div>
         <div class="card-body">

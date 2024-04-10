@@ -2,9 +2,11 @@
 {% load static %}
 <html>
 <head>
-	<title>Buy Me Coffee</title>
+	<title>Order Successful</title>
 
 	<link href="https://fonts.googleapis.com/css?family=Fjalla+One|Inter&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css">
 
 	<!-- Landing page styling -->
 	<style type="text/css">
@@ -212,7 +214,8 @@
 			padding:30px;
 			background-color: #fff;
 			text-align: center;
-			box-shadow: 0 1px 3px 0 #dce0e6;
+			background-color: #E1F0DA;
+			box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
 		    border-radius: 4px;
 		    border: 1px solid transparent;
 		}
@@ -237,17 +240,40 @@
 
 		#succes-icon{
 			width: 100px;
+			
 
+		}
+		#succes-icon_ofUndraw
+		{
+			width: 50%;
+		}
+		#succes-icon_ofUndraw img{
+			width: 50%;
+		}
+		p strong {
+			font-size: large;
+			font-weight: 300;
+			font-family: 'Fjalla One', sans-serif;
 		}
 	</style>
 </head>
 <body>
     <div id="box">
-		<img id="succes-icon" src="{% static 'images/check.png' %}">
-		<h4>Thank you for your Purchase</h4>
+		<!-- <img id="succes-icon" src="{% static 'images/check.png' %}"><br> -->
+		<img id="succes-icon_ofUndraw" src="{% static 'images/undraw_online_payments_re_y8f2 (1).svg' %}">
+		<h4 class="mt-5">Thank you {{Update_order.customer.user}} for your Purchase</h4>
 		<p></p>
 		<hr>
-		<a class="myButton" href="{% url 'homepage' %}">&#x2190;Back to Home page</a>
+		<div class="order-details">
+			<h3>Order Details</h3>
+			<!-- Replace the following lines with actual order details -->
+			<p> <i class='bx bx-package mt-3' style="font-size: large;" ></i> <strong>  Order No :</strong> #{{Update_order.id}}</p>
+			<p> <i class='bx bx-rupee mt-3' style="font-size: large;" ></i> <strong>  Total Amount :</strong> {{Update_order.total_price}}</p>
+			<p> <i class='bx bxs-home mt-3' style="font-size: large;" ></i>  <strong>Address :</strong> {{Update_order.customer.shipping_address}} </p>
+			<p> <i class='bx bxs-truck mt-3' style="font-size: large;" ></i>  <strong>Delivery :</strong> Your order Will Be Delivered Soon..</p>
+			
+		</div>
+		<a class="myButton mt-5" href="{% url 'homepage' %}"><i class='bx bx-arrow-back' ></i> Back to Home page</a>
 	</div>
 	<script>
 		// Assuming you have some Razorpay response object named razorpay_response

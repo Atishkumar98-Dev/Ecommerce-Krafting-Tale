@@ -7,7 +7,7 @@
   font-family: 'Roboto', sans-serif;
 }
  
-.container {
+.p_box {
   max-width: 1200px;
   margin: 0 auto;
   margin-top: 5%;
@@ -21,8 +21,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: #358ED7;
+  -webkit-box-shadow:0px 0px 96px 29px rgba(3,89,237,0.99);
+  -moz-box-shadow: 0px 0px 96px 29px rgba(3,89,237,0.99);
+  box-shadow: 0px 0px 96px 29px rgba(3,89,237,0.99); */
+border-radius:
+82% 18% 39% 61% / 48% 40% 60% 52%
 }
- 
+/* -webkit-box-shadow:0px 0px 96px 29px rgba(45,255,196,0.99);
+-moz-box-shadow: 0px 0px 96px 29px rgba(45,255,196,0.99);
+box-shadow: 0px 0px 96px 29px rgba(45,255,196,0.99); */
+
 .right-column {
   width: 35%;
   margin-top: 60px;
@@ -49,7 +58,7 @@
 }
 .product-description h1 {
   font-weight: 300;
-  font-size: 52px;
+  font-size: 22px;
   color: #43484D;
   letter-spacing: -2px;
 }
@@ -209,7 +218,7 @@
   }
 }
 </style>
-<main class="container">
+<main class="p_box">
  
     <!-- Left Column / Headphones Image -->
     <div class="left-column">
@@ -223,7 +232,7 @@
       <!-- Product Description -->
       <div class="product-description">
         <span>{{ product.category }}</span>
-        <h1>{{ product.name|slice:4 }}</h1>
+        <h1>{{ product.name }}</h1>
         <p>{{ product.description }}</p>
       </div>
    

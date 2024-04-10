@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-8mgu4k)vb+%ya_*-*tp15c8t@s!2js@@ihqrp-d98&ag_3tg7)
 DEBUG = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -162,9 +162,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
-RAZORPAY_API_KEY = ''
-RAZORPAY_SECRET_KEY = ''
-
+# RAZORPAY_API_KEY = ''
+# RAZORPAY_SECRET_KEY = ''
+RAZORPAY_API_KEY = 'rzp_test_0WHQYRDtp8Bmui'
+RAZORPAY_SECRET_KEY = 'WMOKNLjkLiXnhtKRJbraLLNc'
+# https://gitlab.com/atish98.dev/eCommerce_django
+# Jett@4321
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

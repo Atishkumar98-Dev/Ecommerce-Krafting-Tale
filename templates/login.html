@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+	<!-- <meta charset="UTF-8"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title> Login</title>
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -36,16 +37,14 @@ body:before {
     justify-content: center;
     align-items: center;
 }
-.card{
-
-    width: 25%;
-    border-radius: 15px;
-    height: auto;
-    /* background-color: brown; */
-    background: rgba(231, 144, 12, 0.5);
-    position: absolute;
-    border: none;
-}
+.card {
+            width: 25%;
+            border-radius: 15px;
+            height: auto;
+            background: rgba(231, 144, 12, 0.5);
+            position: absolute;
+            border: none;
+        }
 .login_card{
     display: flex;
     flex-direction: column;
@@ -65,6 +64,12 @@ body:before {
     background: transparent;
     border: 1px solid rgba(233, 231, 227, 0.5);
 }
+
+@media only screen and (max-width: 720px) {
+    .card {
+        width: 80%;
+    }
+}
     </style>
 </head>
 <body>
@@ -81,7 +86,7 @@ body:before {
 {% endif %}
                 <h1>Login Page</h1>
                 <form method="POST" action=""> {% csrf_token %}
-                    <div class="mb-3">
+                    <div class="">
                       <label for="exampleInputEmail1" class="form-label" >Username</label>
                       <input type="text" name ="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                       <div id="emailHelp" class="form-text">Make sure you have Unique Username.</div>

@@ -1,0 +1,90 @@
+{% extends 'root.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    .img-thumbnail {
+        width: 10%;
+    }
+
+    .order-column {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container mt-5">
+
+    <div class="row">
+
+        <div class="col-md-6 order-column">
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h2>Pending Orders</h2>
+                    <span class="badge bg-secondary">{{ pending_orders_count_direct }}</span>
+                </div>
+                <div class="card-body">
+                    {% for order in user_orders %}
+                        {% if order.delivery_status == 'Pending' or order.delivery_status == 'In Progress' %}
+                            <div class="card mb-4">
+                                <div class="card-header bg-warning text-dark">
+                                    Order #{{ order.id }} | Transaction Status: {{ order.status }} | Delivery Status: {{ order.delivery_status }} | Total Price: ₹ {{ order.total_price }}
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        {% for item in order.orderitem_set.all %}
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>
+                                                        <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail">
+                                                        Product: {{ item.product_variant.name }} | Quantity: {{ item.quantity }} | Price: ₹ {{ item.product_variant.price }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 order-column">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h2>Completed Orders</h2>
+                    <span class="badge bg-secondary">{{ completed_orders_count_direct }}</span>
+                </div>
+                <div class="card-body">
+                    {% for order in user_orders %}
+                        {% if order.delivery_status == 'Completed' %}
+                            <div class="card mb-4">
+                                <div class="card-header bg-success text-white">
+                                    Order #{{ order.id }} | Transaction Status: {{ order.status }} | Delivery Status: {{ order.delivery_status }} | Total Price: ₹ {{ order.total_price }}
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        {% for item in order.orderitem_set.all %}
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>
+                                                        <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail">
+                                                        Product: {{ item.product_variant.name }} | Quantity: {{ item.quantity }} | Price: ₹ {{ item.product_variant.price }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}

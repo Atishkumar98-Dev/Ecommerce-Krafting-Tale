@@ -167,7 +167,6 @@ def home(request):
     order, created = Order.objects.get_or_create(customer=customer, status='Pending')
     order_items = OrderItem.objects.filter(order=order)
     order_count = order_items.count()
-
     context = {'all_products': all_products,'form': form, 'order_count': order_count, 'products': products,'featured_product':featured_products}
     return render(request, 'home.html', context)
 
@@ -182,15 +181,12 @@ def product_detail(request, product_id):
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     customer = request.user.customer
-    
     try:
         order, created = Order.objects.get_or_create(customer=customer, status='Pending')
     except Order.MultipleObjectsReturned:
         orders = Order.objects.filter(customer=customer, status='Pending')
-        
         order = orders.first() if orders.exists() else None
         created = False
-
     try:
         order_item, item_created = OrderItem.objects.get_or_create(order=order, product_variant=product)
     except OrderItem.MultipleObjectsReturned:
@@ -368,7 +364,8 @@ def successMsg(request):
     Update_order.save()
     Delivery_order = Delivery.objects.create(order_id=Update_order.id,user_id=request.user.id,status='In Progress')
     Delivery_order.save()
-    return render(request, 'success.html',)
+    context = {"Update_order":Update_order,}
+    return render(request, 'success.html',context)
 
 
 @login_required(login_url='/login/')
@@ -504,9 +501,9 @@ def dashboard(request):
     current_date = now.strftime("%d-%m-%Y")
     qs = Product.objects.all()
     # _main = int(price_graph.price for price_graph in qs)
-    # x = [x.name for x in qs]
-    # y = [int(y.price) for y in qs]
-    # chart = get_plot(x, y)
+    x = [x.name for x in qs]
+    y = [y.price for y in qs]
+    chart = get_plot(x, y)
     cust = Customer.objects.all()
     prod = Product.objects.all()
     cat = Category.objects.all()
@@ -515,9 +512,45 @@ def dashboard(request):
     prod_count   = Product.objects.count()
     cat_count    = Category.objects.count()
     ord_count    = OrderItem.objects.count()
-    context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord,
+    context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
                'time': current_time, 'day': current_date,'cust_count':cust_count,'prod_count':prod_count,'cat_count':cat_count,'ord_count':ord_count}
     return render(request, 'dashboard.html', context)
+
+
+def dashboard_order(request):
+    # Retrieve user orders excluding 'Pending' status
+    user_orders = Order.objects.exclude(status='Pending').prefetch_related('orderitem_set__product_variant').order_by('-id')
+
+    # Count pending (In Progress) and completed orders manually
+    pending_orders_count_manual = 0
+    completed_orders_count_manual = 0
+
+    for order in user_orders:
+        if order.status == 'In Progress':
+            pending_orders_count_manual += 1
+        elif order.status == 'Completed':
+            completed_orders_count_manual += 1
+
+    # Count pending (In Progress) and completed orders using direct count
+    pending_orders_count_direct = Order.objects.filter(status='In Progress').exclude(status='Pending').count()
+    completed_orders_count_direct = Order.objects.filter(status='Completed').exclude(status='Pending').count()
+
+    context = {
+        'user_orders': user_orders,
+        'pending_orders_count_manual': pending_orders_count_manual,
+        'completed_orders_count_manual': completed_orders_count_manual,
+        'pending_orders_count_direct': pending_orders_count_direct,
+        'completed_orders_count_direct': completed_orders_count_direct,
+    }
+
+    return render(request, 'dashboard_order.html', context)
+
+
+def contact_us(request):
+    context = {}
+    return render(request, 'contact_us.html',context)
+
+
 
 
 # def refund(request):

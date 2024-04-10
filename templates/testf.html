@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styling for the shopping cart */
+        .cart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .product-thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .product-price {
+            font-weight: bold;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .checkout-button {
+            display: block;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .cart-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <div class="product-item">
+            <img src="voltas-ac-thumbnail.jpg" alt="Voltas AC" class="product-thumbnail">
+            <div class="product-details">
+                <p>Voltas 1 Ton 5 Star Inverter Split AC (Copper SAC_125_DZX White)</p>
+                <p class="product-price">₹55,990</p>
+            </div>
+        </div>
+        <div class="product-item">
+            <img src="grunt-style-tshirt-thumbnail.jpg" alt="Grunt Style T-Shirt" class="product-thumbnail">
+            <div class="product-details">
+                <p>Grunt Style Realtree Edge- Ammo Flag Men's T-Shirt</p>
+                <p class="product-price">₹9,506</p>
+            </div>
+        </div>
+        <p class="total-price">Total Price: ₹65,496</p>
+        <button class="checkout-button">Proceed to Checkout</button>
+    </div>
+</body>
+</html>

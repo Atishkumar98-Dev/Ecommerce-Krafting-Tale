@@ -11,12 +11,24 @@
     #imagePreview img {
         border-radius: 15px;
         padding: 2%;
-        box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
         /* background-color: grey; */
         
         /* border: 2px solid grey; */
     }
+    .img-fluid {
+    shape-outside: circle(50%);
+    background-blend-mode: multiply;
+    text-overflow: ellipsis;
+    image-rendering: optimizeQuality;
+    filter: grayscale(100%);
+    transition: filter 0.7s ease-in-out, backdrop-filter 0.7s ease-in-out;
+    backdrop-filter: blur(10px);
+}
 
+.img-fluid:hover {
+    filter: grayscale(0%) drop-shadow(14px 14px 0px rgb(87, 94, 100));
+    backdrop-filter: blur(10px);
+}
     .image_section{
         display: flex;
         width: 100%;

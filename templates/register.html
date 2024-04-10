@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Register </title>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 	<link href="style.css" rel="stylesheet">
@@ -35,16 +36,17 @@ body:before {
     justify-content: center;
     align-items: center;
 }
-.card{
+.card {
+            width: 25%;
+            border-radius: 15px;
+            height: auto;
+            background: rgba(231, 144, 12, 0.5);
+            position: absolute;
+            border: none;
+        }
 
-    width: 25%;
-    border-radius: 15px;
-    height: auto;
-    /* background-color: brown; */
-    background: rgba(231, 144, 12, 0.5);
-    position: absolute;
-    border: none;
-}
+
+
 .login_card{
     display: flex;
     flex-direction: column;
@@ -64,6 +66,13 @@ body:before {
     background: transparent;
     border: 1px solid rgba(233, 231, 227, 0.5);
 }
+
+@media only screen and (max-width: 720px) {
+    .card {
+        width: 80%;
+    }
+}
+   
     </style>
 </head>
 <body>

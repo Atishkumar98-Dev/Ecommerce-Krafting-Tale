@@ -3,6 +3,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    
@@ -12,6 +13,13 @@
     <title>{% block title %}{% endblock %}</title>
   </head>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    </style>
+  <style>
+      body{
+        font-family: "Poppins", sans-serif;
+        background-color: #ffffff;
+    }
      .sidenav {
             height: 100%;
             width: 0;
@@ -43,6 +51,11 @@
         .navbar-btn img {
     vertical-align: middle;
 }
+/* rgb(152, 175, 218) */
+.btn{
+  background-color: rgb(152, 175, 218);
+  color: black;
+}
         @media only screen and (max-width: 767px) {
           /* #mySidenav {
                 width: 100%;
@@ -51,28 +64,41 @@
   </style>
   <body>
     <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><span style="font-size:20px;cursor:pointer" onclick="openNav()">
-            <i class='bx bx-menu' style='color:#cbc0c0;'></i>
-            <a href="/" style="text-decoration: none; color: white;"> Deal Bazar</a></span></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <script src="https://cdn.lordicon.com/lordicon.js"></script>
+            <span style="font-size:20px;cursor:pointer" onclick="openNav()"><i class='bx bx-menu' style='color:#ffffff'  ></i></span>
+            </a>
+            <lord-icon
+            src="https://cdn.lordicon.com/mqdkoaef.json"
+            trigger="hover"
+            colors="primary:#ffffff"
+            style="width:50px;height:50px">
+          </lord-icon> </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-4">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-50 justify-content-evenly">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Connect</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Products</a>
+              </li>
               
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown ">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Services
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Complaint on any Action</a></li>
+                  <li><a class="dropdown-item" href="#">Feedback</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="#">Get to know Us</a></li>
                 </ul>
               </li>
               <li class="nav-item">
@@ -91,7 +117,7 @@
                 </a>
                 <span class="navbar-btn">
                   <a href='/profile/' class="btn btn-outline-success mx-2" type="submit">
-                      <img src="{{request.user.customer.photo}}" alt="Profile Image" style="width: 35%; height: 30px;">
+                     
                       Profile
                   </a>
               </span>
