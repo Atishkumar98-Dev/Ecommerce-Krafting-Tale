@@ -1000,6 +1000,9 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
           <div id="chat-output"></div>
           <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
           <button onclick="sendMessage()">Send</button>
+          <!-- In your HTML template -->
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
       </div>
   </div>
 
@@ -1023,6 +1026,26 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
        },
      });
    </script>
+    <script>
+      function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  
+  const csrftoken = getCookie('csrftoken');
+  
+     </script>
    <script>
     function imageLoaded() {
   document.getElementById("loader").style.display = "none";
@@ -1038,26 +1061,40 @@ function imageError() {
     function sendMessage() {
     var input = document.getElementById('chat-input');
     var message = input.value;
-    console.log('message',message)
-    input.value = '';  // Clear the input after sending
-
     if (message) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://13.233.101.242:8055/simple_chatbot/", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Content-Type", "application/json"); // Set the content type to JSON
+        xhr.setRequestHeader("X-CSRFToken", csrftoken); // Set the CSRF token
 
         xhr.onreadystatechange = function() {
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                var response = JSON.parse(this.responseText);
-                displayMessage('Deal Bazar Bot: ' + response.message );
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if (this.status === 200) {
+                    try {
+                        var response = JSON.parse(this.responseText);
+                        if (response.message) {
+                            displayMessage('Deal Bazar Bot: ' + response.message);
+                        } else {
+                            displayMessage('Deal Bazar Bot: Received an unexpected response.');
+                        }
+                    } catch (e) {
+                        displayMessage('Deal Bazar Bot: Error parsing response.');
+                    }
+                } else {
+                    // Handle HTTP errors
+                    displayMessage('Deal Bazar Bot: Failed to send message with status ' + this.status);
+                }
             }
-        }
+        };
 
-        xhr.send('message=' + encodeURIComponent(message));
+        var jsonData = JSON.stringify({message: message});
+        xhr.send(jsonData);
         displayMessage('You: ' + message);
+
+        // Clear the input after sending the message
+        input.value = '';
     }
 }
-
 function displayMessage(text) {
     var chatOutput = document.getElementById('chat-output');
     chatOutput.innerHTML += '<div>' + text + '</div>';
@@ -1083,5 +1120,6 @@ function toggleChat() {
 
 
    </script>
+  
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     {% endblock content %}
