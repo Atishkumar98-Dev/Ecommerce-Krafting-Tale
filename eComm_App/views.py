@@ -96,7 +96,12 @@ def loginpage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        # if user.is_superuser:
+        #     print('superuser')
+        #     login(request, user)
+        #     return redirect('/dashboard/')
         if user is not None:
+            print('user')
             login(request, user)
             request.session.set_expiry(5000)
             return redirect('/')
@@ -494,6 +499,28 @@ def profile(request):
 
 
 @login_required(login_url='/login/')
+# def dashboard(request):
+#     now = datetime.datetime.now()
+#     format = '%H:%M:%S %p'
+#     current_time = now.strftime(format)
+#     current_date = now.strftime("%d-%m-%Y")
+#     qs = Product.objects.all()
+#     # _main = int(price_graph.price for price_graph in qs)
+#     x = [x.name for x in qs]
+#     y = [y.price for y in qs]
+#     chart = get_plot(x, y)
+#     cust = Customer.objects.all()
+#     prod = Product.objects.all()
+#     cat = Category.objects.all()
+#     ord = Order.objects.filter(customer=request.user.customer).exclude(status='Pending').prefetch_related('orderitem_set__product_variant')
+#     cust_count   = Customer.objects.count()
+#     prod_count   = Product.objects.count()
+#     cat_count    = Category.objects.count()
+#     ord_count    = OrderItem.objects.count()
+#     context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
+#                'time': current_time, 'day': current_date,'cust_count':cust_count,'prod_count':prod_count,'cat_count':cat_count,'ord_count':ord_count}
+#     return render(request, 'dashboard.html', context)
+
 def dashboard(request):
     now = datetime.datetime.now()
     format = '%H:%M:%S %p'
@@ -514,8 +541,7 @@ def dashboard(request):
     ord_count    = OrderItem.objects.count()
     context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
                'time': current_time, 'day': current_date,'cust_count':cust_count,'prod_count':prod_count,'cat_count':cat_count,'ord_count':ord_count}
-    return render(request, 'dashboard.html', context)
-
+    return render (request,'dashboard-main.html',context)
 
 def dashboard_order(request):
     # Retrieve user orders excluding 'Pending' status

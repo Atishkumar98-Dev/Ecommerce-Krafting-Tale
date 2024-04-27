@@ -10,13 +10,17 @@
         }
 
         .cart-container {
-            background-color: #f1f1f1;
+            /* background-color: #f1f1f1; */
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
             padding: 30px;
             margin-top: 30px;
         }
-
+.cart-with-button{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
         .cart-title {
             display: flex;
             justify-content: space-between;
@@ -30,8 +34,9 @@
         }
 
         .product-image {
-            max-width: 80px;
+            width: 15%;
             height: auto;
+            margin-bottom: 4%;
             border-radius: 4px;
         }
 
@@ -42,7 +47,7 @@
         }
         .table-bordered>:not(caption)>*>* {
     border-width: 0 var(--bs-border-width);
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
 }
         .btn-proceed-to-checkout {
             background-color: #343a40;
@@ -53,6 +58,18 @@
         .table{
             table-layout: fixed;
         }
+        .card{
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border: none;
+        }
+        .for-product{
+            display: flex;
+            width: 73%;
+            flex-direction: column;
+        }
+        .for-checkout{
+            width: 25%;
+        }
     </style>
 </head>
 
@@ -61,56 +78,52 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card cart-container">
-
+                <div class="cart-container mb-5 mt-5">
+                    
                     <div class="card-body">
+                       
+                            
+                            {% if order_items %}
+                            
 
-                        <div class="cart-title">
-                            <lord-icon
-                            src="https://cdn.lordicon.com/odavpkmb.json"
-                            trigger="hover"
-                            style="width:50px;height:50px">
-                        </lord-icon> 
-                            <!-- <h1 class="mb-0">
-                            My Cart</h1> -->
-                        </div>
 
-                        {% if order_items %}
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Total</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in order_items %}
-                                    <tr>
-                                        <td class="align-middle">
-                                            <img src="{{ item.product_variant.image_url }}" alt=""
-                                                class="product-image me-2">{{ item.product_variant.name }}
-                                        </td>
-                                        <td class="align-middle">{{ item.quantity }}</td>
-                                        <td class="align-middle">₹ {{ item.product_variant.price }}</td>
-                                        <td class="align-middle">₹ {{ item.product_variant.price | floatformat:"2" }}
-                                        </td>
-                                        <td class="align-middle cart-actions">
+<div class="cart-with-button">
+
+    <div class="for-product card p-5">
+        <div class="cart-title">
+            <!-- <lord-icon
+            src="https://cdn.lordicon.com/odavpkmb.json"
+            trigger="hover"
+            style="width:150px;height:150px">
+        </lord-icon>  -->
+        <img src="../static/images/undraw_shopping_app_flsj.png" alt=""style='width: 20%;'>
+            <!-- <h1 class="mb-0">
+                My Cart</h1> -->
+            </div>
+    {% for item in order_items %}
+    <hr>
+        <div class="m-4">
+            <div class="align-middle">
+                                            <img src="{{ item.product_variant.image_url }}" alt="" class="product-image">
+                                        </div>
+                                        <div class="align-middle textual-product-details">Product : {{ item.product_variant.name }}</div>
+                                        <div class="align-middle textual-product-details">Quantity : {{ item.quantity }}</div>
+                                        <!-- <div class="align-middle textual-product-details"> Price : ₹ {{ item.product_variant.price }}</div> -->
+                                        <div class="align-middle textual-product-details">Price : ₹ {{ item.product_variant.price | floatformat:"2" }}
+                                        </div>
+                                        <div class="align-middle cart-actions mt-4">
                                             <form method="POST" action="{% url 'reduce_quantity' item.id %}"
-                                                class="d-inline">
-                                                {% csrf_token %}
-                                                <button type="submit"
+                                            class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit"
                                                     class="btn btn-outline-danger btn-sm">-</button>
-                                            </form>
-                                            <span class="mx-2">{{ item.quantity }}</span>
-                                            <form method="POST" action="{% url 'increase_quantity' item.id %}"
+                                                </form>
+                                                <span class="mx-2">{{ item.quantity }}</span>
+                                                <form method="POST" action="{% url 'increase_quantity' item.id %}"
                                                 class="d-inline">
                                                 {% csrf_token %}
                                                 <button type="submit"
-                                                    class="btn btn-outline-success btn-sm mx-1">+</button>
+                                                class="btn btn-outline-success btn-sm mx-1">+</button>
                                             </form>
                                             <form method="POST" action="{% url 'remove_from_cart' item.id %}"
                                                 class="d-inline">
@@ -123,15 +136,26 @@
                                                     style="width:20px;height:20px">
                                                 </lord-icon></button>
                                             </form>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </div>
+                                    
+                                    
                                     {% endfor %}
-                                </tbody>
-                            </table>
+                                </div>
+                                    <div class="for-checkout card p-5">
+                                            
+                                        <div class="proceed-button">
+                                            
+                                            <p class="lead total-price">Total Price: ₹ {{ total_price }}</p>
+                                            <div class="col-sm-10">
+                                              <input type="text" class="form-control" id="inputEmail3" placeholder="Discount Coupon">
+                                          </div>
+                                            <a href="{% url 'checkout' %}" class="btn btn-proceed-to-checkout">Proceed to Checkout</a>
+                                            </div>
+                                    </div>
+                                </div>
+                                
                         </div>
-
-                        <p class="lead total-price">Total Price: ₹ {{ total_price }}</p>
-                        <a href="{% url 'checkout' %}" class="btn btn-proceed-to-checkout">Proceed to Checkout</a>
 
                         {% else %}
                         <p class="lead text-center">Your cart is empty.</p>

@@ -23,7 +23,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'price']
+    list_display = ['name', 'category', 'price','discount_price','actual_price','stock_quantity']
     list_filter = ['category']
     search_fields = ['name']
 

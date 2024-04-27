@@ -738,6 +738,74 @@ flex-direction: column;
 #id_search_query{
   width: 100%;
 }
+
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 90px;  /* Set width for the circle */
+    height: 90px;  /* Set height for the circle */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;  /* Make it round */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    cursor: pointer;
+    overflow: hidden;  /* Ensures nothing spills out of the container */
+}
+
+.toggle-button {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    text-align: center;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 1%;  /* Keep the button round */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;  /* Optional: Adjust font size as needed */
+}
+
+#chat-content {
+    display: none;  /* Start hidden */
+    flex-direction: column;
+    width: 300px;  /* Width when expanded */
+    height: auto;  /* Auto height depending on content */
+    border-radius: 15px;  /* Rounded corners for the chat box */
+    overflow: hidden;
+}
+
+#chat-output {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f4f4f8;
+    border-bottom: 1px solid #ddd;
+}
+
+#chat-input, button {
+    width: calc(100% - 2px);  /* Adjust width to fit inside chat-content */
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
     /* Media query for laptops and larger screens */
    
     /* Media query for mobile devices */
@@ -926,7 +994,14 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
         </nav>
     </div>
 
-
+    <div class="chat-container" id="chat-container">
+      <button class="toggle-button" onclick="toggleChat()">Chat <i class='mx-1 bx bxs-chat'></i></button>
+      <div id="chat-content" style="display: none;">
+          <div id="chat-output"></div>
+          <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
+          <button onclick="sendMessage()">Send</button>
+      </div>
+  </div>
 
 
 
@@ -958,6 +1033,55 @@ function imageError() {
   document.getElementById("loader").style.display = "none";
   // Handle image loading error here (e.g., display alternative text or error message).
 }
+   </script>
+   <script>
+    function sendMessage() {
+    var input = document.getElementById('chat-input');
+    var message = input.value;
+    console.log('message',message)
+    input.value = '';  // Clear the input after sending
+
+    if (message) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8055/simple_chatbot/", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                var response = JSON.parse(this.responseText);
+                displayMessage('Deal Bazar Bot: ' + response.message );
+            }
+        }
+
+        xhr.send('message=' + encodeURIComponent(message));
+        displayMessage('You: ' + message);
+    }
+}
+
+function displayMessage(text) {
+    var chatOutput = document.getElementById('chat-output');
+    chatOutput.innerHTML += '<div>' + text + '</div>';
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+}
+function toggleChat() {
+    var chatContent = document.getElementById('chat-content');
+    var chatContainer = document.getElementById('chat-container');
+
+    if (chatContent.style.display === 'none') {
+        chatContent.style.display = 'block';
+        chatContainer.style.width = '300px';
+        chatContainer.style.height = 'auto';
+        chatContainer.style.borderRadius = '15px';
+    } else {
+        chatContent.style.display = 'none';
+        chatContainer.style.width = '90px';
+        chatContainer.style.height = '90px';
+        chatContainer.style.borderRadius = '50%';
+    }
+}
+
+
+
    </script>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     {% endblock content %}

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from . import views
-
+from simple_chatbot.views import SimpleChatbot
 
 urlpatterns = [
     path('',views.home,name='homepage'),
@@ -43,5 +43,7 @@ urlpatterns = [
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('order_success/', views.successMsg, name='successMsg'),
+    # path('all-order/', views.all_order, name='all-order'),
+    path("simple_chatbot/", SimpleChatbot.as_view())
     
 ]

@@ -29,14 +29,14 @@
                                 <div class="card-header bg-warning text-dark">
                                     Order #{{ order.id }} | Transaction Status: {{ order.status }} | Delivery Status: {{ order.delivery_status }} | Total Price: ₹ {{ order.total_price }}
                                 </div>
-                                <div class="card-body">
+                                <div class="">
                                     <ul class="list-group">
                                         {% for item in order.orderitem_set.all %}
                                             <li class="list-group-item">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <span>
-                                                        <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail">
-                                                        Product: {{ item.product_variant.name }} | Quantity: {{ item.quantity }} | Price: ₹ {{ item.product_variant.price }}
+                                                        <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail"><br>
+                                                        Product: {{ item.product_variant.name }} <br> Quantity: {{ item.quantity }} <br> Price: ₹ {{ item.product_variant.price }}
                                                     </span>
                                                 </div>
                                             </li>
