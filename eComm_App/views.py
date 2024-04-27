@@ -101,7 +101,7 @@ def loginpage(request):
         #     login(request, user)
         #     return redirect('/dashboard/')
         if user is not None:
-            print('user')
+            # print('user')
             login(request, user)
             request.session.set_expiry(5000)
             return redirect('/')
