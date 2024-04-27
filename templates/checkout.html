@@ -109,7 +109,7 @@
             // image: 'your_logo_url',
             order_id: '{{ razor_pay_order.id }}',
             handler: function (response) {
-                window.location.href = `http://127.0.0.1:8055/order_success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`;
+                window.location.href = `http://13.233.101.242:8055/order_success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`;
             }
         };
 
