@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.urls import path , include
 from . import views
 from simple_chatbot.views import SimpleChatbot
+# from .views import LoginAPIView   
+from rest_framework_simplejwt.views import TokenRefreshView 
+from .views import CustomTokenObtainPairView
+# from .views import AddToCartAPI
 
 urlpatterns = [
     path('',views.home,name='homepage'),
@@ -43,6 +47,15 @@ urlpatterns = [
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('order_success/', views.successMsg, name='successMsg'),
+    path('api/cart/', views.cart_api, name='api-cart-detail'),
+    path('api/add-to-cart/', views.add_to_cart_api, name='api-add-to-cart'),
+    # path('add-to-cart/<int:product_id>/', AddToCartAPI.as_view(), name='add_to_cart_api'),
+    path('api/products/<int:product_id>/', views.product_detail_view, name='product-detail'),
+    path('api/products/', views.product_list, name='product-list'),
+    # path('api/login/', LoginAPIView.as_view(), name='login'),
+    path('api/update_profile/', views.update_profile_api, name='update_profile_api'),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('all-order/', views.all_order, name='all-order'),
     path("simple_chatbot/", SimpleChatbot.as_view())
     

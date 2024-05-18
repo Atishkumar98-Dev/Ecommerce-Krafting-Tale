@@ -4,6 +4,7 @@ from django.contrib import messages
 import razorpay
 import datetime
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .utils import get_plot
 from .models import Product, Order, OrderItem, ProductVariant,Customer,Category,Delivery,Refund
@@ -16,6 +17,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm ,CustomerForm,DeliveryForm,ExcelUploadForm,ProductFilterForm
 from .models import Customer
+from .serializers import *
 from django.core.files.storage import FileSystemStorage 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -23,6 +25,58 @@ import requests
 import pandas as pd
 from io import TextIOWrapper
 from django.db.models import Q
+from .serializers import ProductSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# from .serializers import LoginSerializer
+
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+# class LoginAPIView(APIView):
+#     def post(self, request):
+#         serializer = LoginSerializer(data=request.data)
+#         if serializer.is_valid():
+#             user = serializer.validated_data['user']
+#             user_data = {
+#                 'id': user.id,
+#                 'username': user.username,
+#                 # 'email': user.email,
+#                 # Add any other user information you want to pass
+#             }
+#             user = serializer.validated_data['user']
+#             # You can now use the authenticated user object
+#             return Response({"message": "User logged in successfully", "user": user_data, "username": user.username}, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def product_list(request):
+    products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def product_detail_view(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    serializer = ProductSerializer(product)
+    return Response(serializer.data)
+
+
 
 def is_url_accessible(url):
     try:
@@ -176,6 +230,128 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+
+
+
+
+# @api_view(['GET', 'POST'])
+# # @permission_classes([IsAuthenticated])
+# def cart_api(request):
+#     if request.method == 'GET':
+#         order = Order.objects.filter(customer=request.user.customer, status='Pending').first()
+#         serializer = OrderSerializer(order)
+#         return Response(serializer.data)
+#     elif request.method == 'POST':
+#         serializer = OrderSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors)
+
+
+
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def cart_detail_view(request):
+#     try:
+#         # Ensure the user is authenticated and has a customer profile
+#         if not hasattr(request.user, 'customer'):
+#             return Response({'message': 'User does not have a customer profile'}, status=400)
+
+#         order = Order.objects.get(customer=request.user.customer, status='Pending')
+#         serializer = OrderSerializer(order)
+#         return Response(serializer.data)
+#     except Order.DoesNotExist:
+#         return Response({'message': 'No active order found'}, status=404)
+
+@api_view(['GET'])
+# @authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def cart_api(request):
+    try:
+        customer = request.user.customer
+
+        # Retrieve or create the pending order for the customer
+        try:
+            order, created = Order.objects.get_or_create(customer=customer, status='Pending')
+        except Order.MultipleObjectsReturned:
+            orders = Order.objects.filter(customer=customer, status='Pending')
+            order = orders.first() if orders.exists() else None
+            created = False
+
+        # Retrieve order items for the order
+        order_items = OrderItem.objects.filter(order=order)
+        total_price = 0
+
+        # Calculate total price and handle errors
+        items_with_errors = []
+        order_items_data = []
+        for item in order_items:
+            item_price = 0
+            product_variant = item.product_variant
+
+            if product_variant.price is not None:
+                try:
+                    prod_price = product_variant.price
+                    Price = int(prod_price)
+                    if item.quantity is not None:
+                        item_price = Price * int(item.quantity)
+                    else:
+                        item.quantity = 1
+                        item_price = Price
+                except ValueError:
+                    print(f"Error: Unable to convert price for item {item} to a valid number. Skipping this item.")
+                    items_with_errors.append(item)
+                    continue
+            else:
+                print(f"Warning: Item {item} has no specified price. Skipping this item.")
+
+            total_price += item_price
+            order_items_data.append({
+                'product_id': product_variant.id,
+                'quantity': item.quantity,
+                'name': product_variant.name,
+                'price': product_variant.price,
+                'image_url': product_variant.image_url,
+            })
+
+        return Response({'order_items': order_items_data, 'total_price': total_price, 'items_with_errors': items_with_errors})
+    except ObjectDoesNotExist:
+        return Response({'message': 'No active order found'}, status=404)
+    except Exception as e:
+        return Response({'message': str(e)}, status=500)
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_to_cart_api(request):
+    # Extract product_id and quantity from the request data
+    product_id = request.data.get('product_id')
+    quantity = request.data.get('quantity', 1)  # Default to 1 if not specified
+
+    # Get or create a pending order for the user
+    order, _ = Order.objects.get_or_create(customer=request.user.customer, status='Pending')
+
+    # Get the product, or return a 404 error if it doesn't exist
+    product = get_object_or_404(Product, pk=product_id)
+
+    # Try to get an existing order item, or create a new one if it doesn't exist
+    order_item, created = OrderItem.objects.get_or_create(order=order, product_variant=product,
+                                                          defaults={'quantity': quantity})
+
+    if not created:
+        # If the item already exists, update the quantity
+        order_item.quantity += int(quantity)
+        order_item.save()
+
+    # Serialize the order item to return it as a response
+    serializer = OrderItemSerializer(order_item)
+    return Response(serializer.data)
+    
+
+    
 @login_required(login_url='/login/')
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -495,6 +671,31 @@ def profile(request):
 
 
 
+@api_view(['POST'])
+def update_profile_api(request):
+    if request.method == 'POST':
+        # Assuming your form is sent as JSON data
+        data = request.data
+
+        # Assuming you're passing the user's ID along with the request
+        user_id = data.get('user_id')
+
+        try:
+            customer = Customer.objects.get(user_id=user_id)
+        except Customer.DoesNotExist:
+            return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Assuming you're using a serializer to handle the data
+        serializer = CustomerSerializer(instance=customer, data=data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 
@@ -539,7 +740,7 @@ def dashboard(request):
     prod_count   = Product.objects.count()
     cat_count    = Category.objects.count()
     ord_count    = OrderItem.objects.count()
-    context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
+    context = {'cc': cat, 'cust': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
                'time': current_time, 'day': current_date,'cust_count':cust_count,'prod_count':prod_count,'cat_count':cat_count,'ord_count':ord_count}
     return render (request,'dashboard-main.html',context)
 
