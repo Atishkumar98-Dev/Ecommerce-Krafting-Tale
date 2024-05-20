@@ -54,7 +54,7 @@ SIMPLE_CHATBOT = {
 }
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8055','*'
+    'http://localhost:8055',"http://13.233.101.242:8055",
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
