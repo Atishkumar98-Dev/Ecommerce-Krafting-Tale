@@ -30,7 +30,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=False,blank=True,null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
-    image = models.ImageField(upload_to='product_images/',null=True,blank=True)
+    # image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     ratings = models.FloatField(blank=True,null=True,)
     no_of_ratings = models.PositiveIntegerField(blank=True,null=True,)
     discount_price = models.PositiveIntegerField(default=0,blank=True)
@@ -47,7 +47,8 @@ class ProductVariant(models.Model):
     variant_name = models.CharField(max_length=255)
     variant_price = models.DecimalField(max_digits=10, decimal_places=2)
     variant_quantity = models.PositiveIntegerField(default=0)
-    image = models.ImageField(null=True)
+    # image = models.ImageField(null=True)
+
 
 
 state_choices = (("Andhra Pradesh","Andhra Pradesh"),("Arunachal Pradesh ","Arunachal Pradesh "),("Assam","Assam"),("Bihar","Bihar"),("Chhattisgarh","Chhattisgarh"),("Goa","Goa"),("Gujarat","Gujarat"),("Haryana","Haryana"),("Himachal Pradesh","Himachal Pradesh"),("Jammu and Kashmir ","Jammu and Kashmir "),("Jharkhand","Jharkhand"),("Karnataka","Karnataka"),("Kerala","Kerala"),("Madhya Pradesh","Madhya Pradesh"),("Maharashtra","Maharashtra"),("Manipur","Manipur"),("Meghalaya","Meghalaya"),("Mizoram","Mizoram"),("Nagaland","Nagaland"),("Odisha","Odisha"),("Punjab","Punjab"),("Rajasthan","Rajasthan"),("Sikkim","Sikkim"),("Tamil Nadu","Tamil Nadu"),("Telangana","Telangana"),("Tripura","Tripura"),("Uttar Pradesh","Uttar Pradesh"),("Uttarakhand","Uttarakhand"),("West Bengal","West Bengal"),("Andaman and Nicobar Islands","Andaman and Nicobar Islands"),("Chandigarh","Chandigarh"),("Dadra and Nagar Haveli","Dadra and Nagar Haveli"),("Daman and Diu","Daman and Diu"),("Lakshadweep","Lakshadweep"),("National Capital Territory of Delhi","National Capital Territory of Delhi"),("Puducherry","Puducherry"))
@@ -55,7 +56,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     shipping_address = models.TextField()
     email = models.EmailField()
-    photo = models.ImageField(upload_to='profile_photos/',null=True,blank=False)
+    photo = models.ImageField(upload_to='',null=True,blank=False)
     address = models.CharField(max_length=255)
     address2 = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255)

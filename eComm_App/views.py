@@ -36,6 +36,43 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.pagination import PageNumberPagination
+
+from rest_framework import generics
+from .serializers import CustomerSerializer
+import os
+# from .serializers import CustomerSerializer
+class CustomerProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.customer  # Assuming 'customer' is the related name in User model
+        serializer = CustomerSerializer(profile, context={'request': request})
+        return Response(serializer.data)
+
+
+class UserOrdersAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            customer = request.user.customer
+
+            # Retrieve user orders excluding pending ones
+            user_orders = Order.objects.filter(customer=customer).exclude(status='Pending').order_by('-id')
+
+            paginator = PageNumberPagination()
+            paginator.page_size = 5
+            result_page = paginator.paginate_queryset(user_orders, request)
+            
+            # Serialize user orders
+            serializer = OrderSerializer(result_page, many=True)
+
+            return paginator.get_paginated_response(serializer.data)
+        except ObjectDoesNotExist:
+            return Response({'message': 'No active orders found'}, status=404)
+        except Exception as e:
+            return Response({'message': str(e)}, status=500)
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -126,7 +163,7 @@ def upload_csv(request):
                     # ratings=row['ratings'],
                     # no_of_ratings = row['no_of_ratings'],
                     image_url=row['image'],
-                    # discount_price = row['discount_price'],
+                    discount_price = row['discount_price'],
                     # actual_price = row['actual_price'],
 
                     category=main_category,
@@ -626,15 +663,16 @@ def profile(request):
         zip_code = request.POST.get('zip_code')
         shipping_address = request.POST.get('shipping_address')
         gender = request.POST.get('gender')
-
+        from django.core.files.storage import default_storage
+        from django.core.files.base import ContentFile
         # Assuming you have a one-to-one relationship between User and Customer
         user = request.user
         profile = user.customer  # Adjust this according to your model structure
         if 'photo' in request.FILES:
-            photo = request.FILES['photo']
+            photo_file = request.FILES['photo']
             fs = FileSystemStorage()
-            filename = fs.save(photo.name, photo)
-            profile.photo = fs.url(filename)
+            file_name = default_storage.save(photo_file.name, ContentFile(photo_file.read()))
+            profile.photo = default_storage.url(file_name)
             profile.save()
         # Update the profile fields
         profile.email = email

@@ -22,9 +22,10 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product_variant = ProductSerializer()
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ['id', 'quantity', 'item_price', 'product_variant']
 
 class OrderSerializer(serializers.ModelSerializer):
     orderitem_set = OrderItemSerializer(many=True, read_only=True)
@@ -39,9 +40,20 @@ class ProductVariantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CustomerSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Customer
         fields = '__all__'
+
+    def get_photo_url(self, obj):
+        request = self.context.get('request')
+        if obj.photo and hasattr(obj.photo, 'url'):
+            photo_url = obj.photo.url
+            if request is not None:
+                return request.build_absolute_uri(photo_url)
+            return photo_url
+        return None
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

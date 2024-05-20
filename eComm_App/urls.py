@@ -22,6 +22,8 @@ from simple_chatbot.views import SimpleChatbot
 from rest_framework_simplejwt.views import TokenRefreshView 
 from .views import CustomTokenObtainPairView
 # from .views import AddToCartAPI
+from .views import UserOrdersAPIView
+from .views import CustomerProfileView
 
 urlpatterns = [
     path('',views.home,name='homepage'),
@@ -49,9 +51,11 @@ urlpatterns = [
     path('order_success/', views.successMsg, name='successMsg'),
     path('api/cart/', views.cart_api, name='api-cart-detail'),
     path('api/add-to-cart/', views.add_to_cart_api, name='api-add-to-cart'),
+    path('api/user_orders/', UserOrdersAPIView.as_view(), name='user_orders_api'),
     # path('add-to-cart/<int:product_id>/', AddToCartAPI.as_view(), name='add_to_cart_api'),
     path('api/products/<int:product_id>/', views.product_detail_view, name='product-detail'),
     path('api/products/', views.product_list, name='product-list'),
+    path('api/profile/', CustomerProfileView.as_view(), name='profile_api'),
     # path('api/login/', LoginAPIView.as_view(), name='login'),
     path('api/update_profile/', views.update_profile_api, name='update_profile_api'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
