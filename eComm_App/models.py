@@ -30,7 +30,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=False,blank=True,null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
-    # image = models.ImageField(upload_to='product_images/',null=True,blank=True)
+    image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     ratings = models.FloatField(blank=True,null=True,)
     no_of_ratings = models.PositiveIntegerField(blank=True,null=True,)
     discount_price = models.PositiveIntegerField(default=0,blank=True)

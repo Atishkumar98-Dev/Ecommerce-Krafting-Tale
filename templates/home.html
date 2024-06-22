@@ -1004,7 +1004,7 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
                     <div class="card">
                         <div class="card-body">
                             <div class="card_img">
-                                <img id="myImage" src="{{ prod.image_url }}" class="card-img-top" alt="{{ prod.name }}"  onload="imageLoaded()" onerror="imageError()">
+                                <img id="myImage" src="{{ prod.image}}" class="card-img-top" alt="{{ prod.name }}"  onload="imageLoaded()" onerror="imageError()">
                                 <div id="loader" class="loader"></div>
                             </div>
                             <h5 class="card-title m-3">{{ prod.name|slice:":15" }}...</h5>
