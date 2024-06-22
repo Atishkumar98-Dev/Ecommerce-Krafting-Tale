@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eComm_App',
     'corsheaders',
+    'dashboard',
     'simple_chatbot',
     'rest_framework'
 ]
@@ -209,8 +210,13 @@ STATICFILES_DIRS = [
 ]
 # RAZORPAY_API_KEY = ''
 # RAZORPAY_SECRET_KEY = ''
-RAZORPAY_API_KEY = 'rzp_test_0WHQYRDtp8Bmui'
-RAZORPAY_SECRET_KEY = 'WMOKNLjkLiXnhtKRJbraLLNc'
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+RAZORPAY_API_KEY = os.getenv('RAZORPAY_API_KEY')
+RAZORPAY_SECRET_KEY = os.getenv('RAZORPAY_SECRET_KEY')
 # https://gitlab.com/atish98.dev/eCommerce_django
 # Jett@4321
 

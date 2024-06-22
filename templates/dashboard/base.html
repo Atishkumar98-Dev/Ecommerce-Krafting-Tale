@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+</style>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background-color: #ffffff;
+  }
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #212529;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  .sidenav a {
+    padding: 20px 18px 18px 32px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #fff;
+    display: block;
+    transition: 0.3s;
+  }
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    margin-top: 11%;
+    right: 1%;
+    font-size: 30px;
+    margin-left: 70%;
+  }
+  .navbar-btn img {
+    vertical-align: middle;
+  }
+  .btn {
+    background-color: rgb(152, 175, 218);
+    color: black;
+  }
+  @media only screen and (max-width: 767px) {
+    /* #mySidenav {
+      width: 100%;
+    } */
+  }
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="toggleNav()">
+          <i class='bx bx-menu' style='color:#ffffff'></i>
+        </span>
+      </a>
+      <lord-icon src="https://cdn.lordicon.com/mqdkoaef.json" trigger="hover" colors="primary:#ffffff" style="width:50px;height:50px"></lord-icon>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-50 justify-content-evenly">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Delivery</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Services
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Complaint on any Action</a></li>
+              <li><a class="dropdown-item" href="#">Feedback</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Get to know Us</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{request.user.username}}</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          {% if user.is_authenticated %}
+          {% if request.path == '/' %}
+          <a href="/cart/" class="btn btn-secondary position-relative">
+            <i class='bx bx-cart'></i> My Cart
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{order_count}}
+              <span class="visually-hidden">Items</span>
+            </span>
+          </a>
+          <span class="navbar-btn">
+            <a href='/profile/' class="btn btn-outline-success mx-2" type="submit">
+              Profile
+            </a>
+          </span>
+          {% endif %}
+          <a href='/logout/' class="btn btn-outline-success" type="submit">Logout <i class='bx bx-exit'></i></a>
+          {% else %}
+          <a href='/login/' class="btn btn-outline-success" type="submit"><i class='bx bx-power-off'></i> Login </a>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div id="mySidenav" class="sidenav mt-5">
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a> -->
+    {% if user.is_superuser %}<a href="/dashboard/"><i class='bx bxs-pie-chart-alt-2'></i> Dashboard</a>{% endif %}
+    <a href="/cart/"><i class='bx bxs-user'></i> Users</a>
+    <a href="{% url 'user_orders' %}"><i class='bx bx-package'></i> Order</a>
+    <a href="/delivery_track/"><i class='bx bx-map'></i> Track Delivery Status</a>
+    {% for group in user.groups.all %}
+    {% if group.name == 'Delivery_Team' %}
+    <a href="/all_orders_details/"><i class='bx bxs-truck'></i> Update Order Delivery</a>
+    {% endif %}
+    {% endfor %}
+    <a href="/contact_us/"><i class='bx bxs-phone-call'></i> Contact Us</a>
+    <li><hr class="dropdown-divider bg-light"></li>
+    {% for group in user.groups.all %}
+    {% if group.name == 'Sales' %}
+    <a href="/sales/"><i class='bx bx-briefcase'></i> Sales</a>
+    {% endif %}
+    {% endfor %}
+  </div>
+  <div class="">
+    {% block content %}
+    {% endblock content %}
+  </div>
+  <!-- Optional JavaScript; choose one of the two! -->
+  <script>
+    function toggleNav() {
+      const sidenav = document.getElementById("mySidenav");
+      if (sidenav.style.width === "0px" || sidenav.style.width === "") {
+        if (window.matchMedia("(min-width: 1200px)").matches) {
+          sidenav.style.width = "15%";
+        } else if (window.matchMedia("(min-width: 768px)").matches) {
+          sidenav.style.width = "50%";
+        } else {
+          sidenav.style.width = "50%";
+        }
+      } else {
+        sidenav.style.width = "0";
+      }
+    }
+  </script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  -->
+</body>
+</html>

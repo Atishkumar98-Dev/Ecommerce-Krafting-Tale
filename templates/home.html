@@ -16,6 +16,33 @@
   animation: spin 1s linear infinite;
   display: none;
 }
+.radio-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group{
+      display: flex;
+      flex-direction: row;
+    }
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        margin: 1%;
+        /* border: 1px solid #ccc; */
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    .form-check:hover {
+        background-color: #f9f9f9;
+    }
+    .form-check-input {
+        margin-right: 10px;
+    }
+    .form-check-label {
+        margin-left: 5px;
+    }
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -48,6 +75,23 @@
   align-items: center;
   flex-direction: row;
 
+}
+input[text]{
+  padding: 3% !important;
+}
+.search_button_icon{
+  border-radius: 10px;
+  width: 100%;
+  padding: 2% !important;
+}
+#id_category{
+  border-radius: 10px;
+  padding: 7%;
+  /* border: none; */
+}
+.search_button{
+  width: 15%;
+  border-radius: 10px;
 }
 .buttons_for_prod button {
   box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(184, 174, 174, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
@@ -687,9 +731,16 @@ flex-direction: column;
         align-items: center;
 
     }
+
+    .pack{
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      width: 50%;
+    }
 .form-row{
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
     width: 100%;
     /* background-color: #92C7CF; */
     padding: 2%;
@@ -700,7 +751,7 @@ flex-direction: column;
 }
 .form-select{
     width: 100% !important;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
 }
 .data_product {
   padding: 3%;
@@ -742,7 +793,7 @@ flex-direction: column;
 
 }
 #id_search_query{
-  width: 100%;
+  width: 70%;
 }
 
 .chat-container {
@@ -901,29 +952,51 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
 
 
 </div>
-<div class="container mt-4">
 
-    <div class="container mt-4">
-        <div class="row">
-            <div class="">
-                <form method="get" class="mb-4">
-                    <div class="form-row">
-                        <div class=" m-2">
-                            <!-- {{ form.category.label_tag }} -->
-                            {{ form.category }}
-                        </div>
-                        <div class=" m-2">
-                            <!-- {{ form.search_query.label_tag }} -->
-                            <!-- {{ form.search_query }} -->
-                            <input type="text" name="search_query" class="form-control" id="id_search_query" placeholder="Search">
+
+<div class="container mt-4">
+  <div class="row">
+      <div class="">
+          <form method="get" class="mb-4" id="filterForm">
+              <div class="form-row">
+                  <div class="m-2">
+                      <!-- Render radio buttons with custom styling -->
+                      <div class="form-group">
+                          <!-- <label>Category</label> -->
+                          <div class="form-check">
+                              <input type="radio" id="all-categories" name="category" value="all" class="form-check-input">
+                              <label for="all-categories" class="form-check-label">All Categories</label>
                           </div>
-                        <button type="submit" class="btn btn-secondary"><i class='bx bx-search-alt-2'></i></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
+                          {% for radio in form.category %}
+                              <div class="form-check">
+                                  {{ radio.tag }}
+                                  {{ radio.choice_label }}
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+
+                  <div class="m-2 pack">
+                      <input type="text" name="search_query" class="form-control search_button_icon" id="id_search_query" placeholder="Search">
+                    <button type="submit" class="btn-secondary search_button">
+                        <i class='bx bx-search-alt-2'></i>
+                    </button>
+                  </div>
+              </div>
+          </form>
+          <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  const radios = document.querySelectorAll('input[type="radio"][name="category"]');
+                  radios.forEach(radio => {
+                      radio.addEventListener('change', function() {
+                          document.getElementById('filterForm').submit();
+                      });
+                  });
+              });
+          </script>
+      </div>
+  </div>
+
     
         <div class="grid_prod">
             {% for prod in products %}
@@ -945,7 +1018,7 @@ VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: small
                 </div>
             {% endfor %}
         </div>
-        
+      </div>
         
         
     </div>
@@ -1126,6 +1199,15 @@ function toggleChat() {
 
 
    </script>
-  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radios = document.querySelectorAll('input[type="radio"][name="category"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+        });
+    });
+</script>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     {% endblock content %}

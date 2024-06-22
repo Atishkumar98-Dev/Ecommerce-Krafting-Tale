@@ -11,9 +11,19 @@ class ExcelUploadForm(forms.Form):
 
 
 class ProductFilterForm(forms.Form):
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="All Categories", required=False,
-        widget=forms.Select(attrs={'class': 'form-select'}))
-    search_query = forms.CharField(label="Search", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        empty_label=None,
+        required=False,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'})
+    )
+    search_query = forms.CharField(
+        label="Search",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+
 
 class CreateUserForm(UserCreationForm):
     class Meta:
