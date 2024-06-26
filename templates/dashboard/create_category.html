@@ -1,0 +1,20 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} Dashboard Home {% endblock title %}
+{% block content %}
+
+<div class="container mt-5">
+    <h1>Create Category</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            {{ form.slug.label_tag }}
+            {{ form.slug }}
+        </div>
+        <button type="submit" class="btn btn-primary mt-5">Submit</button>
+    </form>
+</div>
+{% endblock content %}

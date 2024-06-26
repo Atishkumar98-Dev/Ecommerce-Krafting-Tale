@@ -24,6 +24,9 @@ from .import views
 urlpatterns = [
    
     path('', views.dash_index,name='dash_home'),
+    path('product-add/', views.add_product, name='product-additon'),
+    path('category-add/', views.create_category, name='category-additon'),
+    path('brand-add/', views.create_brand, name='brand-additon'),
 ]
 
 

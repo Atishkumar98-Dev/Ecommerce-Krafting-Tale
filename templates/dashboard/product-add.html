@@ -1,0 +1,108 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} Dashboard Home {% endblock title %}
+{% block content %}
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container mt-5">
+
+        <div class="form-group">
+            {{ form.name.label_tag }}
+        {{ form.name }}
+    </div>
+    <div class="form-group">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+    </div>
+    <div class="form-group">
+        {{ form.price.label_tag }}
+        {{ form.price }}
+    </div>
+    <div class="form-group">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+    </div>
+    <div class="form-group">
+        {{ form.sub_category.label_tag }}
+        {{ form.sub_category }}
+    </div>
+    <div class="form-group">
+        {{ form.image_url.label_tag }}
+        {{ form.image_url }}
+    </div>
+    <div class="form-group">
+        {{ form.brand.label_tag }}
+        {{ form.brand }}
+    </div>
+    <div class="form-group">
+        {{ form.slug.label_tag }}
+        {{ form.slug }}
+    </div>
+    <div class="form-group">
+        {{ form.stock_quantity.label_tag }}
+        {{ form.stock_quantity }}
+    </div>
+    <!-- <div class="form-group">
+        {{ form.image.label_tag }}
+        {{ form.image }}
+    </div> -->
+    <div class="image_section">
+
+        <div id="imagePreview" class="mt-2">
+            {% if form.image %}
+            
+            <img src="{{ form.image }}" alt="Uploaded Photo" class="img-fluid" id="currentImage">
+            {% endif %}
+        </div>
+    
+    </div>
+    <div class="col-md-6">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" name="image"  onchange="previewImage(this)">
+    </div>
+    <div class="form-group">
+        {{ form.ratings.label_tag }}
+        {{ form.ratings }}
+    </div>
+    <div class="form-group">
+        {{ form.no_of_ratings.label_tag }}
+        {{ form.no_of_ratings }}
+    </div>
+    <div class="form-group">
+        {{ form.discount_price.label_tag }}
+        {{ form.discount_price }}
+    </div>
+    <div class="form-group">
+        {{ form.actual_price.label_tag }}
+        {{ form.actual_price }}
+    </div>
+    <button type="submit" class="btn btn-primary mt-5 mb-5">Submit</button>
+</div>
+</form>
+
+
+<script>
+    function previewImage(input) {
+      var preview = document.getElementById('imagePreview');
+      var currentImage = document.getElementById('currentImage');
+      var file = input.files[0];
+
+      if (file) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              if (currentImage) {
+                  currentImage.src = e.target.result;
+              } else {
+                  preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" class="img-fluid" id="currentImage">';
+              }
+          }
+
+          reader.readAsDataURL(file);
+      } else {
+          preview.innerHTML = '';  // Clear the preview if no file is selected
+      }
+  }
+</script>
+{% endblock content %}
