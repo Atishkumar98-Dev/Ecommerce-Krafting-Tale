@@ -41,7 +41,7 @@
                 {% for item in order.orderitem_set.all %}
                     <div class="d-flex justify-content-between align-items-center">
                         <span>
-                            <img src="{{ item.product_variant.image_url }}" alt="" class="img-thumbnail"><br>
+                            <img src="/{{ item.product_variant.image }}" alt="" class="img-thumbnail"><br>
                             Product: {{ item.product_variant.name }}<br>
                             Quantity: {{ item.quantity }}<br>
                             Price: ₹ {{ item.product_variant.price }}
