@@ -33,7 +33,7 @@ def create_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('category_list')  # replace with your desired redirect
+            return redirect('/')  # replace with your desired redirect
     else:
         form = CategoryForm()
     return render(request, 'dashboard/create_category.html', {'form': form})
@@ -43,7 +43,7 @@ def create_brand(request):
         form = BrandForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('brand_list')  # replace with your desired redirect
+            return redirect('/')  # replace with your desired redirect
     else:
         form = BrandForm()
     return render(request, 'dashboard/create_brand.html', {'form': form})
