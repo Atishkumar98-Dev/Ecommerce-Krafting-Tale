@@ -18,7 +18,15 @@
   <style>
       body{
         font-family: "Poppins", sans-serif;
-        background-color: #ffffff;
+        background-color: #f4f3db;
+        color: #b58555 !important;
+    }
+    .bg-dark{
+      background-color: #f4f3db !important;
+    }
+
+    .text-dark{
+      color: #b58555 !important;
     }
      .sidenav {
             height: 100%;
@@ -27,7 +35,7 @@
             z-index: 1;
             top: 0;
             left: 0;
-            background-color: #111;
+            background-color: #f4f3db !important;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -51,6 +59,9 @@
         .navbar-btn img {
     vertical-align: middle;
 }
+.nav-link {
+  color: #b58555 !important;
+}
 /* rgb(152, 175, 218) */
 .btn{
   background-color: rgb(152, 175, 218);
@@ -61,20 +72,43 @@
                 width: 100%;
             } */
     }
+    .logo{
+      width: 6%;
+    }
+    .common-button {
+      border: none;
+      background-color: #b58555;
+      color: #d4d3b4;
+      display: flex;
+      margin: 5%;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      padding: 5%;
+      justify-content: space-evenly;
+      padding-left: 15%;
+      padding-right: 15%;
+      text-decoration: none;
+      
+    }
   </style>
   <body>
     <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
         <div class="container">
           <a class="navbar-brand" href="#">
             <script src="https://cdn.lordicon.com/lordicon.js"></script>
-            <span style="font-size:20px;cursor:pointer" onclick="openNav()"><i class='bx bx-menu' style='color:#ffffff'  ></i></span>
+            <span style="font-size:20px;cursor:pointer" onclick="openNav()"><i class='bx bx-menu' style='color:#b58555'  ></i></span>
             </a>
-            <lord-icon
+            <!-- <lord-icon
             src="https://cdn.lordicon.com/mqdkoaef.json"
             trigger="hover"
             colors="primary:#ffffff"
             style="width:50px;height:50px">
-          </lord-icon> </a>
+          </lord-icon>  -->
+
+          <img src="../static/images/circle-logo.png" alt="" class="logo">
+        
+        </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -102,29 +136,28 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{request.user.username}}</a>
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Welcome To Krafting Tale</a>
               </li>
             </ul>
             <form class="d-flex">
                 {% if user.is_authenticated %}
                 {% if request.path == '/' %}
-                <a href="/cart/" class="btn btn-secondary position-relative">
-                  <i class='bx bx-cart'></i> My Cart
+                <a href="/cart/" class="common-button position-relative">
+                  <i class='bx bx-cart'></i>
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {{order_count}}
                     <span class="visually-hidden">Items</span>
                   </span>
                 </a>
-                <span class="navbar-btn">
-                  <a href='/profile/' class="btn btn-outline-success mx-2" type="submit">
+                
+                  <a href='/profile/' class=" common-button " type="submit">
                      
                       Profile
                   </a>
-              </span>
                 {% endif %}
-                <a  href ='/logout/' class="btn btn-outline-success" type="submit">Logout <i class='bx bx-exit'></i></a>
+                <a  href ='/logout/' class="common-button " type="submit">Logout <i class='bx bx-exit'></i></a>
                   {% else %}
-                  <a  href ='/login/' class="btn btn-outline-success" type="submit"><i class='bx bx-power-off'></i> Login </a>
+                  <a  href ='/login/' class="common-button " type="submit"><i class=' bx bx-power-off'></i> Login </a>
                 {% endif %}
             </form>
           </div>

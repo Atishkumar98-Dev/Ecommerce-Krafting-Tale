@@ -1,0 +1,16 @@
+.common-button {
+    border: none;
+    background-color: #b58555;
+    color: #d4d3b4;
+    display: flex;
+    margin: 5%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 5%;
+    justify-content: space-evenly;
+    padding-left: 15%;
+    padding-right: 15%;
+    text-decoration: none;
+    
+  }
