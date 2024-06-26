@@ -612,18 +612,21 @@ flex-direction: column;
         animation: slider 25s linear infinite;
     }
 
-@keyframes slider{
-  0%{
+    @keyframes slider {
+  0% {
     background-image: url('../static/images/image-1.jpg');
   }
-  40%{
+  25% {
     background-image: url('../static/images/image-2.jpg');
   }
-  80%{
+  50% {
     background-image: url('../static/images/image-3.jpg');
   }
-  100%{
+  75% {
     background-image: url('../static/images/image-4.jpg');
+  }
+  100% {
+    background-image: url('../static/images/image-1.jpg');
   }
 }
     .banner_content {

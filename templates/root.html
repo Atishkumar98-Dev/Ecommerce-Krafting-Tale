@@ -15,6 +15,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
     </style>
+    {% load static %}
   <style>
       body{
         font-family: "Poppins", sans-serif;
@@ -91,6 +92,11 @@
       text-decoration: none;
       
     }
+    .common-button:hover{
+
+    }
+
+
   </style>
   <body>
     <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
@@ -106,7 +112,7 @@
             style="width:50px;height:50px">
           </lord-icon>  -->
 
-          <img src="../static/images/circle-logo.png" alt="" class="logo">
+          <img src="{% static 'images/circle-logo.png' %}" alt="" class="logo">
         
         </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,10 +145,10 @@
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Welcome To Krafting Tale</a>
               </li>
             </ul>
-            <form class="d-flex">
+            <form class="d-flex mx-5">
                 {% if user.is_authenticated %}
                 {% if request.path == '/' %}
-                <a href="/cart/" class="common-button position-relative">
+                <a href="/cart/" class="common-button position-relative mx-3">
                   <i class='bx bx-cart'></i>
                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {{order_count}}
@@ -150,7 +156,7 @@
                   </span>
                 </a>
                 
-                  <a href='/profile/' class=" common-button " type="submit">
+                  <a href='/profile/' class=" common-button" type="submit">
                      
                       Profile
                   </a>
