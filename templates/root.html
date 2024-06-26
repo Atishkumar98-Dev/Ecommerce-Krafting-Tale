@@ -63,6 +63,10 @@
 .nav-link {
   color: #b58555 !important;
 }
+.mx-8rem {
+  margin-left: 8rem;
+  margin-right: 8rem;
+}
 /* rgb(152, 175, 218) */
 .btn{
   background-color: rgb(152, 175, 218);
@@ -92,10 +96,7 @@
       text-decoration: none;
       
     }
-    .common-button:hover{
-
-    }
-
+   
 
   </style>
   <body>
@@ -145,7 +146,7 @@
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Welcome To Krafting Tale</a>
               </li>
             </ul>
-            <form class="d-flex mx-5">
+            <form class="d-flex mx-8rem">
                 {% if user.is_authenticated %}
                 {% if request.path == '/' %}
                 <a href="/cart/" class="common-button position-relative mx-3">
