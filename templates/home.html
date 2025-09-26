@@ -1,1219 +1,248 @@
 {% extends 'root.html' %}
-
 {% load static %}
+
 {% block content %}
 <title>{% block title %}Krafting Tale | Homepage{% endblock %}</title>
+
+<!-- Swiper & Boxicons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 <style>
+  .radio-category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.radio-card {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.radio-card input[type="radio"] {
+    display: none; /* hide default radio */
+}
+
+.radio-card .radio-label {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+/* Checked state */
+.radio-card input[type="radio"]:checked + .radio-label {
+    background-color: #0d6efd; /* Bootstrap primary color */
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Hover effect */
+.radio-card:hover {
+    border-color: #0d6efd;
+}
+
+/* --- GLOBAL --- */
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+a { text-decoration: none; }
+/* Change Swiper arrow colors */
+.swiper-button-next, .swiper-button-prev {
+    color: #ffcc00;  /* Gold color */
+    width: 45px;
+    height: 45px;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 25px;  /* arrow size */
+    font-weight: bold;
+}
+
+/* --- LOADER --- */
 .loader {
-  border: 8px solid #f3f3f3; /* Light grey */
-  border-top: 8px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  display: none;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    display: none;
 }
-.radio-buttons {
-        display: flex;
-        flex-direction: column;
-    }
-    .form-group{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-    .form-check {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        padding: 5px;
-        margin: 2%;
-        
-        flex-direction: column-reverse;
-        /* border: 1px solid #ccc; */
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    .form-check .form-check-input {
-    float: none;
-    margin-left:0em;
-}
-    .form-check:hover {
-        background-color: #f9f9f9;
-    }
-    .form-check-input {
-        margin-right: 10px;
-    }
-   
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-    .prd_card {
-  position: relative;
-  width: 100%;
-  height:100%;
-  /* background: #191919; */
-  border-radius: 20px;
-  overflow: hidden;
-  /* margin: 10%; */
-  margin: 4%;
-  margin-left: 3%;
- 
-}
-
-.catprod_card{
-  padding: 3%;
-  color: grey;
-  
-}
-.data_product {
-  padding: 3%;
-  color: grey;
-}
-.buttons_for_prod{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-
-}
-input[text]{
-  padding: 3% !important;
-}
-.search_button_icon{
-  border-radius: 10px;
-  width: 100%;
-  padding: 2% !important;
-}
-#id_category{
-  border-radius: 10px;
-  padding: 7%;
-  /* border: none; */
-}
-.search_button{
-  width: 15%;
-  border-radius: 10px;
-}
-.buttons_for_prod button {
-  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(184, 174, 174, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
- padding: 2%;
- width: 100%;
- color: white;
-  margin: 3%;
-  border: none;
-  
-  border-radius: 10px;
-
-}
-.card:hover{
-  transition: all ease-in-out  .4s;
-  cursor: pointer;
-  /* box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px; */
-}
-.additonal_text{
-  width: 20%;
-  height: 70vh;
-  background-color: rgb(89, 118, 170); 
-  display: flex;
-  font-size: xx-large;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.products_list{
-  width: 80%;
-  height: 70vh;
-}
-
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-.card{
-  width: 30%;
-  margin: 4%;
-  background-color: #fff;
-  transition: .4s ease-in-out;
-  z-index: 99;
-  padding: 10%;
- border-radius: 50px;
- min-height: 40vh;
-background: #e0e0e0;
-/* box-shadow:  20px -20px 60px #bebebe,
-             -20px 20px 60px #ffffff; */
-  /* background-color: aliceblue; */
-  border-radius: 15px;
-}
-.image_in_card{
-  display: flex;
-  border: none;
-  height:auto ;
-  justify-content: center;
-  align-items: center;
-}
-.image_in_card img {
-    border-radius: 15px !important;
-    width: 60% !important;
-    aspect-ratio: 12 / 2 !important;
-    object-fit: contain !important;
-    mix-blend-mode: multiply !important;
-}
-
-.grid_prod{
-  display: grid;
-grid-template-columns: repeat(3, 1fr);
-grid-template-rows: repeat(3, 1fr);
-grid-column-gap: 10px;
-grid-row-gap: 10px;
-}
-.prd_card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  width: 100%;
-  height: 100%;
-  background: rgb(21, 68, 131);
-  transform: skewY(345deg);
-  transition: 0.5s;
-}
-
-.prd_card:hover::before {
-  top: -70%;
-  transform: skewY(390deg);
-}
-
-.prd_card::after {
-  content: "CORSAIR";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  font-weight: 600;
-  font-size: 6em;
-  color: rgba(0, 0, 0, 0.1);
-}
-
-.prd_card .imgBox {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 20px;
-  z-index: 1;
-}
-
-/*
-.prd_card .imgBox img {
-    max-width: 100%;
-
-    transition: .5s;
-}
-
-.prd_card:hover .imgBox img {
-    max-width: 50%;
-
-}
-*/
-.prd_card .contentBox {
-  position: relative;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 2;
-  
-}
-
-.prd_card .contentBox h3 {
-  font-size: 18px;
-  color: white;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.prd_card .contentBox .price {
-  font-size: 24px;
-  color: white;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.prd_card .contentBox .buy {
-  position: relative;
-  top: 100px;
-  opacity: 0;
-  padding: 10px 30px;
-  margin-top: 15px;
-  color: white;
-  text-decoration: none;
-  background: rgb(21, 68, 131);
-  border-radius: 30px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: 0.5s;
-}
-
-.prd_card:hover .contentBox .buy {
-  top: 0;
-  opacity: 1;
-}
-
-.mouse {
-  height: 300px;
-  width: auto;
-}
-
-.prod_card{
-  background-image: linear-gradient(180deg,rgba(46, 86, 173, 0.4),rgba(17, 24, 39,0.3) );display:flex;
-  flex-direction:column;
-  height:100%;
-  width:70%;
-  margin: 18%; 
-  border-radius: 15px;
-}
-.prod_image{
-  height: 100%;
-  border-radius: 15px;
-  padding: 5%;
-  margin: 4%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: linear-gradient(180deg,rgba(46, 86, 173, 0.4),rgba(17, 24, 39,0.3) );
-}
-.prod_image img {
-height: auto;
-width: 100%;
-}
-
-  @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
-  .cat-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  /* margin-left: 10%; */
-}
-  .categories{
-    height:80px;
-    overflow: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    color: black;
-    /* background-image: linear-gradient(-180deg,rgba(46, 86, 173, 0.4),rgba(17, 24, 39,0.3) ); */
-    margin-bottom: 2vh;
-    display: flex;
-    flex-direction: row;
-    /* margin: auto; */
-    border-radius: 2px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    
-}
-.active{
-  color: rgb(0, 0, 0);
-}
-.categories img{
-  height: 70px;
-  padding-top: 10px;
-  width: auto;
-  margin-right: 20px;
-}
-.cat-title
-{
-  font-size: small;
-  margin: 10px;
-  color: black;
-}
-
-.advertisement{
-  /* background-color: antiquewhite; */
- 
-  height: 40vh;
-  border-radius: 15px;
-  display: flex;
-flex-direction: row;
-  width:100%;
-  margin-bottom: 1vh;
-}
-.sub_advertisment_1{
-  /* background-color: rgb(82, 163, 163); */
-  /* background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.8),rgba(77, 78, 78, 0.918)),url('https://cdn.pixabay.com/photo/2020/04/04/15/04/click-5002627_960_720.jpg'); */
-  height:100%;
-  width: 50%;
-  display: flex;
-  border-radius: 10px;
-  justify-content: center;
-    align-items: center;
-    padding: 15px;
-}
-.sub_advertisment_2{
-  /* background-color: rgb(35, 128, 128); */
-  /* background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.8),rgba(77, 78, 78, 0.918)),url('https://cdn.pixabay.com/photo/2020/09/23/20/27/headphones-5596987_960_720.jpg'); */
-  height:100%;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-    align-items: center;
-    padding: 15px;
-}
-
-.sub_container_1{
-    /* background-color: aquamarine; */
-    height:100%;
-    padding: 5px;
-    width: 100%;
-    flex-wrap: wrap;
-    border-radius: 15px;
-    overflow: hidden;
-    background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.6),rgba(77, 78, 78, 0.6)),
-    url('https://cdn.pixabay.com/photo/2020/04/04/15/04/click-5002627_960_720.jpg');
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    display: flex;
-    background-repeat: no-repeat;
+/* --- BANNER --- */
+.swiper { width: 100%; height: 70vh; }
+.swiper-slide {
     background-size: cover;
-    transition: ease-in-out 0.4s;
-}
-.sub_container_2{
-    /* background-color: aquamarine; */
-    height:100%;
-    padding: 5px;
-    width: 100%;
-    flex-wrap: wrap;
-    border-radius: 15px;
-    overflow: hidden;
-    background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.6),rgba(77, 78, 78, 0.6)),
-    url('https://cdn.pixabay.com/photo/2020/09/23/20/28/headphones-5596990_960_720.jpg');
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    background-position: center;
     display: flex;
-    background-repeat: no-repeat;
-    background-size: cover;
-    transition: ease-in-out 0.4s;
-}
-
-.sub_container_1:hover{
-    transition: ease-in-out .7s;
-    box-shadow:none;box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-}
-.sub_container_2:hover{
-  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-    transition: ease-in-out 0.7s;
-}
-
-
-.img-container{
-    /* background-color: cadetblue; */
-    width: 30%;
-    height: 100%;
-}
-.img-container img{
-    width: 100%;
-    height: 100%;
-    border-bottom-left-radius: 5px;
-   border-top-left-radius: 5px;
-    object-fit: cover;
-    transition: ease-in-out 0.7s;
-}
-
-
-
-.card-info{
-    /* background-color: brown; */
-    width: 100%;
-    height: 100%;
-    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: relative;
     color: white;
-    flex-direction: column;
-    padding: 20px;
+}
+.swiper-slide::after {
+    content: '';
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.35);
+}
+.banner_content {
+    position: relative;
+    padding: 3%;
+    font-size: 2rem;
 }
 
-.card-info-title{
-    height: 70%;
-    display: flex;
-    color: #e1e4e1;
-    flex-direction:row;
-    letter-spacing: 1px;
-    font-weight: bolder;
-    font-family: 'Fira Sans', sans-serif;
-    align-items: center;
-    font-size: 50px;
-    border-bottom-right-radius: 5px;
-    width: 100%;
-}
-.card-info-content{
-    height: 30%;
-    border-bottom-right-radius: 5px; 
-    /* background-color: cadetblue; */
-    width: 100%;
-}
-
-.card-info p{
-    font-size: 24px;
-    font-family: 'Fira Sans', sans-serif;
- 
-}
-.ad-btn{
-  background-color: aliceblue;
-  color: black;
-  width:100px;
-  border-radius: 10px;
-  height: 60px;
-  font-family: 'Fira Sans', sans-serif;
-  transition: ease-in-out 0.2s;
-}
-
-.ad-btn:hover{
-  background-color: black;
-  color: aliceblue;
-  transition: ease-in-out 0.2s;
-}
-
-@media only screen and (max-width: 600px) {
-
-  .advertisement{
-  /* background-color: antiquewhite; */
- 
-  height: 100%;
-  border-radius: 15px;
-  display: flex;
-flex-direction: column;
-  width:100%;
-  margin-bottom:10%;
-}
-.sub_advertisment_1{
-  /* background-color: rgb(82, 163, 163); */
-  /* background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.8),rgba(77, 78, 78, 0.918)),url('https://cdn.pixabay.com/photo/2020/04/04/15/04/click-5002627_960_720.jpg'); */
-  height:100%;
-  width: 100%;
-  display: flex;
-  border-radius: 10px;
-  justify-content: center;
-    align-items: center;
-    padding: 15px;
-}
-.card-info p{
-    font-size: 15px;
-    font-family: 'Fira Sans', sans-serif;
- 
-}
-.card-info-title{
-    height: 20%;
-    display: flex;
-    color: #e1e4e1;
-    flex-direction:row;
-    letter-spacing: 1px;
-    font-weight: bolder;
-    font-family: 'Fira Sans', sans-serif;
-    align-items: center;
-    font-size: 20px;
-    border-bottom-right-radius: 5px;
-    width: 100%;
-}
-
-.ad-btn{
-  background-color: aliceblue;
-  color: black;
-  width:100%;
-  border-radius: 10px;
-  height: 18%;
-  margin-top: 12%;
-  font-family: 'Fira Sans', sans-serif;
-  transition: ease-in-out 0.2s;
-}
-
-.sub_advertisment_2{
-  /* background-color: rgb(82, 163, 163); */
-  /* background-image: linear-gradient(180deg,rgba(16, 16, 17, 0.8),rgba(77, 78, 78, 0.918)),url('https://cdn.pixabay.com/photo/2020/04/04/15/04/click-5002627_960_720.jpg'); */
-  height:100%;
-  width: 100%;
-  display: flex;
-  border-radius: 10px;
-  justify-content: center;
-    align-items: center;
-}
-
-  .grid_prod{
-  display: grid;
-            grid-template-columns: 4fr;
-            padding: auto;
-            margin: auto;
-}
-.prd_card {
-  margin: 20%;
- 
-}
-
-}
-
-</style>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-
-    .swiper {
-      width: 100%;
-      height: 100%;
-    }
-
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .products_list{
-  width: 80%;
-  height: 70vh;
-}
-
-    .additonal_text{
-  width: 20%;
-  height: 70vh;
-  background-color: rgb(89, 118, 170); 
-  display: flex;
-  font-size: xx-large;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-    .banner {
-        width: 100%;
-        height: 80vh;
-        display: flex;
-        /* background: linear-gradient(to bottom, rgb(189, 125, 189), #ffffff), url('https://cdn.pixabay.com/photo/2017/06/06/16/48/woman-2377742_1280.jpg'); */
-        background:url('../static/images/image-1.jpg');
-        background-size: cover;
-        background-position: center;
-        /* background-color: #000; */
-        color: #000;
-        font-size: x-large;
-        justify-content: flex-end;
-        align-items: flex-end;
-        animation: slider 25s linear infinite;
-    }
-
-    @keyframes slider {
-  0% {
-    background-image: url('../static/images/image-1.jpg');
-  }
-  25% {
-    background-image: url('../static/images/image-2.jpg');
-  }
-  50% {
-    background-image: url('../static/images/Image-3.jpg');
-  }
-  75% {
-    background-image: url('../static/images/Image-4.jpg');
-  }
-  100% {
-    background-image: url('../static/images/image-1.jpg');
-  }
-}
-    .banner_content {
-
-
-        font-family: "DM Sans", sans-serif;
-        font-optical-sizing: auto;
-        padding: 3%;
-        filter: blur(0px) !important; 
-        color: #fff;
-    }
-    .banner_content p{
-      width: 100%;
-      padding-left: 3%;
-      background-color: #000;
-      color: #FFF !important;
-    }
-
-
-
-    .grid_prod {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        padding: auto;
-        margin: auto;
-        column-gap: 20px;
-        row-gap: 20px;
-    }
-
-    .card{
-  width:90%;
-  margin: 4%;
-  border: none;
-  background-color: #FFF;
-  transition: .4s ease-in-out;
-  z-index: 99;
-  padding: 10%;
-  filter:drop-shadow(14px 14px 4px #b58555);
-  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; */
-  border-radius: 25px;
-/* box-shadow:  16px 16px 36px #777777,
-             -16px -16px 36px #ffffff; */
-  /* background-color: aliceblue; */
-  border-radius: 15px;
-}
-.card:hover{
-  filter:drop-shadow(4px 4px 19px #f4f3db);
-}
-.image_in_card{
-  display: flex;
-  height:20vh ;
-  justify-content: center;
-  align-items: center;
-}
-.image_in_card img{
-  border-radius: 15px;
-  width: 60%;
-}
-.prd_card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  width: 100%;
-  height: 100%;
-  background: rgb(21, 68, 131);
-  transform: skewY(345deg);
-  transition: 0.5s;
-}
-
-.prd_card:hover::before {
-  top: -70%;
-  transform: skewY(390deg);
-}
-    .card img {
-        width: 50%;
-        transition: all 0.8s ease;
-    }
-    .pagination{
-        width: 100%;
-    }
-    /* .card img:hover {
-  width: 70%;
-  transform: translateY(-20%);
-  transform: rotate(-20deg);
-} */
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .buttons_for_cart {
-        display: flex;
-        flex-direction: row;
-
-    }
-
-    .card_img {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .pack{
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      width: 50%;
-    }
-.form-row{
-    display: flex;
-    flex-direction: column-reverse;
-    width: 100%;
-    /* background-color: #92C7CF; */
+/* --- GRID & CARD --- */
+.grid_prod {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
     padding: 2%;
-    justify-content: start;
-    align-items: center;
-    margin: 2;
-    height: auto;
 }
-.form-select{
-    width: 100% !important;
-    /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
-}
-.data_product {
-  padding: 3%;
-  color: grey;
-}
-.image_in_card{
-  display: flex;
-  height:20vh ;
-  justify-content: center;
-  align-items: center;
-}
-.image_in_card img{
-  border-radius: 15px;
-  width: 60%;
-}
-.buttons_for_prod{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-
-}
-.btn-dark{
-    background-color: #b58555;
-    border: none;
-}
-
-/* body{
-    background-color: rgb(152, 175, 218);
-} */
-.buttons_for_prod button {
-  background-color:rgb(152, 175, 218) ;
- padding: 2%;
- width: 100%;
- color: white;
-  margin: 3%;
-  
-  border-radius: 10px;
-
-}
-#id_search_query{
-  width: 70%;
-}
-
-.chat-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 90px;  /* Set width for the circle */
-    height: 90px;  /* Set height for the circle */
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 50%;  /* Make it round */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    z-index: 1000;
-    cursor: pointer;
-    overflow: hidden;  /* Ensures nothing spills out of the container */
-}
-
-.toggle-button {
-    width: 100%;
-    height: 100%;
-    padding: 15px;
-    text-align: center;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 1%;  /* Keep the button round */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;  /* Optional: Adjust font size as needed */
-}
-
-#chat-content {
-    display: none;  /* Start hidden */
-    flex-direction: column;
-    width: 300px;  /* Width when expanded */
-    height: auto;  /* Auto height depending on content */
-    border-radius: 15px;  /* Rounded corners for the chat box */
+.card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease-in-out;
     overflow: hidden;
 }
+.card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(-5px); }
+.card_img { height: 200px; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0; }
+.card_img img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.card-body { padding: 1rem; text-align: center; }
+.card-title { font-weight: 600; margin-bottom: 0.5rem; font-size: 1.2rem; }
+.card-text { color: #555; margin-bottom: 1rem; }
 
-#chat-output {
-    height: 300px;
-    overflow-y: auto;
-    padding: 10px;
-    background-color: #f4f4f8;
-    border-bottom: 1px solid #ddd;
+/* --- BUTTONS --- */
+.buttons_for_cart a {
+    margin: 5px; padding: 8px 12px; border-radius: 8px;
+    color: #555; background-color: #f0f0f0; transition: all 0.3s ease; display: inline-block;
 }
+.buttons_for_cart a:hover { background-color: #e7e5e5; }
 
-#chat-input, button {
-    width: calc(100% - 2px);  /* Adjust width to fit inside chat-content */
-    border: none;
-    padding: 10px;
-    box-sizing: border-box;
-}
+/* --- SEARCH & FILTER --- */
+.form-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.form-check { display: flex; align-items: center; margin-right: 15px; cursor: pointer; }
+.form-check-input { margin-right: 5px; }
 
-button {
-    background-color: #007bff;
-    color: white;
-    height: 50px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+/* --- PAGINATION --- */
+.pagination { display: flex; justify-content: center; padding: 20px 0; }
+.pagination .page-item .page-link { color: #007bff; }
+.pagination .page-item.active .page-link { background-color: #007bff; border-color: #007bff; color: white; }
 
-button:hover {
-    background-color: #0056b3;
-}
+/* --- CHAT WIDGET --- */
+.chat-container { position: fixed; bottom: 20px; right: 20px; width: 70px; height: 70px; border-radius: 50%; background-color: #007bff; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1000; }
+#chat-content { display: none; position: fixed; bottom: 100px; right: 20px; width: 300px; max-height: 400px; background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden; z-index: 1000; }
+#chat-output { flex: 1; padding: 10px; overflow-y: auto; background: #f7f7f7; }
+#chat-input { border: none; padding: 10px; width: 100%; box-sizing: border-box; }
+#chat-content button { background: #007bff; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; }
+#chat-content button:hover { background: #0056b3; }
 
-    /* Media query for laptops and larger screens */
-   
-    /* Media query for mobile devices */
-    @media only screen and (max-width: 767px) {
-      .grid_prod {
-        grid-template-columns: 1fr;
-      }
-      
-      .pack_of_products{
-        display: none !important;
-      }
-        .card {
-            height: auto;
-        }
-    }
+/* --- RESPONSIVE --- */
+@media(max-width: 768px) { .grid_prod { grid-template-columns: 1fr; } .swiper { height: 50vh; } }
 </style>
-<div class="banner">
-    <!-- <h1 class='banner_content'>Shop the Best Deals<br> on Every Items at <p style="color:#92C7CF">Krafting Tale!</p> -->
-    </h1>
-</div>
 
-
-<!-- <div id="carouselExampleControls" class="carousel slide bg-dark p-5" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="../static/images/workplace-business-modern-male-accessories-laptop-black-background.jpg" class="d-block w-50 mx-auto" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img src="../static/images/banner_bg.jpg" class="d-block w-50  mx-auto" alt="...">
-    </div>
-    <div class="carousel-item">
-        <img src="../static/images/beach-1928070_1920.jpg" class="d-block w-50 mx-auto" alt="...">
-    </div>
-      <div class="carousel-item">
-        <img src="../static/images/medium-shot-woman-posing-white-dress.jpg" class="d-block w-50 mx-auto" alt="...">
-    </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-</div> -->
-
-<!-- <div class="pack_of_products" style="display: flex;flex-direction: row; width: 100%;background-color: rgb(152, 175, 218);height: 70vh;">
-    <div class="additonal_text"style="">
-<h1>
-Latest AC's
-</h1>
-<h5 style="text-transform: uppercase;">Electronic Products</h5>
-<a href = '' style="font-size: x-large;color: rgb(223, 216, 216);">
-VIEW ALL<i class='bx bx-right-arrow-alt' style="margin-top: 8%; font-size: smaller;"></i>
-</a>
-
-</div>
-<div class="products_list">
+<!-- --- BANNER SLIDER --- -->
 <div class="swiper mySwiper">
-<div class="swiper-wrapper">
-  {% for prods in featured_product %}
-  
-  <div class="swiper-slide">
-    <div class="card">
-      <div class="image_in_card">
-        <img src="{{prods.image_url}}" alt="{{prods.image}}">
-      </div>
-      <div class="catprod_card">
-        Category: {{prods.category}}
-      </div>
-      <div class="data_product">
-       <h2 style="color: grey;font-size: x-large;">{{ prods.name|slice:":15" }}...</h2>
-       <h6>₹ {{prods.price}}</h6>
-       <h6>{{prods.description}}</h6>
-      </div>
-      <div class=" buttons_for_prod">
-        <button class=""><i class="bx bxs-cart-add m-1"></i> Add to Cart</button>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-<div class="swiper-pagination"></div>
-</div>
-</div> -->
-
-
-</div>
-
-
-<div class="container mt-4">
-  <div class="row">
-      <div class="">
-          <form method="get" class="mb-4" id="filterForm">
-              <div class="form-row">
-                  <div class="m-2 w-100 container">
-                      <!-- Render radio buttons with custom styling -->
-                      <div class="form-group">
-                          <!-- <label>Category</label> -->
-                          <div class="form-check">
-                              <input type="radio" id="all-categories" name="category" value="all" class="form-check-input">
-                              <label for="all-categories" class="form-check-label">All </label>
-                          </div>
-                          {% for radio in form.category %}
-                              <div class="form-check">
-                                  {{ radio.tag }}
-                                  {{ radio.choice_label }}
-                              </div>
-                          {% endfor %}
-                      </div>
-                  </div>
-
-                  <div class="m-2 pack">
-                      <input type="text" name="search_query" class="form-control search_button_icon" id="id_search_query" placeholder="Search">
-                    <button type="submit" class="btn-secondary search_button">
-                        <i class='bx bx-search-alt-2'></i>
-                    </button>
-                  </div>
-              </div>
-          </form>
-          <script>
-              document.addEventListener('DOMContentLoaded', function() {
-                  const radios = document.querySelectorAll('input[type="radio"][name="category"]');
-                  radios.forEach(radio => {
-                      radio.addEventListener('change', function() {
-                          document.getElementById('filterForm').submit();
-                      });
-                  });
-              });
-          </script>
-      </div>
-  </div>
-
-    
-        <div class="grid_prod">
-            {% for prod in products %}
-                <div class="mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card_img">
-                                <img id="myImage" src="{{ prod.image}}" class="card-img-top" alt="{{ prod.name }}"  onload="imageLoaded()" onerror="imageError()">
-                                <div id="loader" class="loader"></div>
-                            </div>
-                            <h5 class="card-title m-3">{{ prod.name|slice:":15" }}...</h5>
-                            <p class="card-text">Price: ₹ {{ prod.price }}</p>
-                            <div class="buttons_for_cart">
-                                <a href="{% url 'add_to_cart' product_id=prod.id %}" class="btn btn-dark text-light my-3 ">Add to cart</a>
-                                <a href="{% url 'product_detail' product_id=prod.id %}" class="btn btn-dark text-light my-3 mx-2">View Product</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background-image:url('{% static 'images/image-1.jpg' %}')">
+            <div class="banner_content">
+                <h1>Welcome to <span style="color:#ffcc00;">Krafting Tale</span></h1>
+            </div>
         </div>
-      </div>
-        
-        
+        <div class="swiper-slide" style="background-image:url('{% static 'images/image-2.jpg' %}')">
+            <div class="banner_content">
+                <h1>Discover Amazing <span style="color:#ffcc00;">Products</span></h1>
+            </div>
+        </div>
+        <div class="swiper-slide" style="background-image:url('{% static 'images/image-3.jpg' %}')">
+            <div class="banner_content">
+                <h1>Shop the Best Deals <span style="color:#ffcc00;">Now</span></h1>
+            </div>
+        </div>
     </div>
-
-
-    <div class="pagination justify-content-center mb-5">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-    
-                {% if products.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-    
-                {% for num in products.paginator.page_range %}
-                    {% if products.number == num %}
-                        <li class="page-item active">
-                            <span class="page-link">{{ num }}</span>
-                        </li>
-                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-    
-                <li class="page-item disabled">
-                    <span class="page-link">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
-                </li>
-    
-                {% if products.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.paginator.num_pages }}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-
-    <div class="chat-container" id="chat-container">
-      <button class="toggle-button" onclick="toggleChat()">Chat <i class='mx-1 bx bxs-chat'></i></button>
-      <div id="chat-content" style="display: none;">
-          <div id="chat-output"></div>
-          <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
-          <button onclick="sendMessage()">Send</button>
-          <!-- In your HTML template -->
-<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-
-      </div>
-  </div>
-
-
+    <!-- Pagination Dots -->
+    <div class="swiper-pagination"></div>
+    <!-- Navigation Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    var swiper = new Swiper(".mySwiper", {
-       slidesPerView: 3,
-       centeredSlides: true,
-       spaceBetween: 10,
-       grabCursor: true,
-       pagination: {
-         el: ".swiper-pagination",
-         clickable: true,
-         
-       },
-       autoplay: {
-         delay: 2500,
-         disableOnInteraction: false,
-       },
-     });
-   </script>
-    <script>
-      function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
-      }
-      return cookieValue;
-  }
-  
-  const csrftoken = getCookie('csrftoken');
-  
-     </script>
-   <script>
-    function imageLoaded() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("myImage").style.display = "block";
-}
-
-function imageError() {
-  document.getElementById("loader").style.display = "none";
-  // Handle image loading error here (e.g., display alternative text or error message).
-}
-   </script>
-   <script>
-    function sendMessage() {
-    var input = document.getElementById('chat-input');
-    var message = input.value;
-    if (message) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://13.233.101.242:8055/simple_chatbot/", true);
-        xhr.setRequestHeader("Content-Type", "application/json"); // Set the content type to JSON
-        xhr.setRequestHeader("X-CSRFToken", csrftoken); // Set the CSRF token
-
-        xhr.onreadystatechange = function() {
-            if (this.readyState === XMLHttpRequest.DONE) {
-                if (this.status === 200) {
-                    try {
-                        var response = JSON.parse(this.responseText);
-                        if (response.message) {
-                            displayMessage('Deal Bazar Bot: ' + response.message);
-                        } else {
-                            displayMessage('Deal Bazar Bot: Received an unexpected response.');
-                        }
-                    } catch (e) {
-                        displayMessage('Deal Bazar Bot: Error parsing response.');
-                    }
-                } else {
-                    // Handle HTTP errors
-                    displayMessage('Deal Bazar Bot: Failed to send message with status ' + this.status);
-                }
-            }
-        };
-
-        var jsonData = JSON.stringify({message: message});
-        xhr.send(jsonData);
-        displayMessage('You: ' + message);
-
-        // Clear the input after sending the message
-        input.value = '';
-    }
-}
-function displayMessage(text) {
-    var chatOutput = document.getElementById('chat-output');
-    chatOutput.innerHTML += '<div>' + text + '</div>';
-    chatOutput.scrollTop = chatOutput.scrollHeight;
-}
-function toggleChat() {
-    var chatContent = document.getElementById('chat-content');
-    var chatContainer = document.getElementById('chat-container');
-
-    if (chatContent.style.display === 'none') {
-        chatContent.style.display = 'block';
-        chatContainer.style.width = '300px';
-        chatContainer.style.height = 'auto';
-        chatContainer.style.borderRadius = '15px';
-    } else {
-        chatContent.style.display = 'none';
-        chatContainer.style.width = '90px';
-        chatContainer.style.height = '90px';
-        chatContainer.style.borderRadius = '50%';
-    }
-}
-
-
-
-   </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const radios = document.querySelectorAll('input[type="radio"][name="category"]');
-        radios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
-        });
-    });
+var swiper = new Swiper(".mySwiper", {
+    loop: true,
+    autoplay: { delay: 4000, disableOnInteraction: false },
+    pagination: { el: ".swiper-pagination", clickable: true },
+    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+});
 </script>
-<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    {% endblock content %}
+
+<!-- --- FILTER FORM & PRODUCT GRID --- -->
+<div class="container mt-4">
+    <form method="get" id="filterForm" class="mb-4">
+        <div>
+            <label class="mb-2 d-block">Category:</label>
+            
+            <div class="radio-category">
+                <!-- All Category -->
+                <label class="radio-card">
+                    <input type="radio" name="category" value="all" id="all-categories" class="form-check-input">
+                    <span class="radio-label">All</span>
+                </label>
+
+                <!-- Dynamic Categories -->
+                {% for radio in form.category %}
+                <label class="radio-card">
+                    {{ radio.tag }}
+                    <span class="radio-label">{{ radio.choice_label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="d-flex mt-3">
+            <input type="text" name="search_query" id="id_search_query" class="form-control" placeholder="Search Products">
+            <button type="submit" class="btn btn-secondary ms-2"><i class='bx bx-search-alt-2'></i></button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.querySelectorAll('input[type="radio"][name="category"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() { document.getElementById('filterForm').submit(); });
+    });
+});
+</script>
+
+<div class="container grid_prod">
+    {% for prod in products %}
+    <div class="card">
+        <div class="card_img"><img src="{{ prod.image }}" alt="{{ prod.name }}"><div class="loader" id="loader"></div></div>
+        <div class="card-body">
+            <h5 class="card-title">{{ prod.name|slice:":20" }}...</h5>
+            <p class="card-text">₹ {{ prod.price }}</p>
+            <div class="buttons_for_cart">
+                <a href="{% url 'add_to_cart' product_id=prod.id %}"><i class="bx bxs-cart-add"></i> Add to Cart</a>
+                <a href="{% url 'product_detail' product_id=prod.id %}">View Product</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Customer, Order, OrderItem,Brand
+from .models import Category, Product, Customer ,Order, OrderItem,Brand
 from .models import Delivery, Refund
 
 @admin.register(Delivery)
@@ -27,6 +27,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['category']
     search_fields = ['name']
 
+
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['customer', 'order_date', 'total_price','status','delivery_status']
     inlines = [OrderItemInline]
@@ -44,6 +46,7 @@ class BrandAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
+# admin.site.register(ProductVariant)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Brand, BrandAdmin)

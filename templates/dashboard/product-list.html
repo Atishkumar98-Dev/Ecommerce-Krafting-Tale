@@ -1,0 +1,30 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} Dashboard Home {% endblock title %}
+{% block content %}
+<style>
+    .all-prod{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+</style>
+
+<div class="container mt-5 w-100">
+    <div class="all-prod">
+{% for product in all_products %}
+
+<div class="card mx-3" style="width: 18rem;">
+  <img src="/{{product.image}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text"> ₹ {{product.price}}</p>
+    <a href="#" class="btn btn-primary">View</a>
+  </div>
+</div>
+{% endfor %}
+</div>
+</div>
+
+
+
+{% endblock content %}

@@ -30,6 +30,7 @@ urlpatterns = [
     path('product_detail/<int:product_id>/', views.product_detail, name='product_detail'),
     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.cart_view, name='cart_view'),
+    path("simple_chatbot/", SimpleChatbot.as_view()),
     path('login/',views.loginpage,name='login'),
     path('register/', views.register,name='register'),
     path('logout/',views.logoutUser, name='logout'),
@@ -42,7 +43,6 @@ urlpatterns = [
     path('delivery_track/', views.delivery_track,name='delivery_track'),
     path('all_orders_details/',views.All_order,name='all_order_details'),
     path('upload-excel/', views.upload_csv, name='upload_excel'),
-    # path('order/<int:order_id>/', views.order_detail, name='order_detail'),
     path('update_delivery/<int:order_id>/', views.delivery_status_update,name='update_delivery'),
     path('reduce_quantity/<int:item_id>/', views.reduce_quantity, name='reduce_quantity'),
     path('increase_quantity/<int:item_id>/', views.increase_quantity, name='increase_quantity'),
@@ -51,16 +51,14 @@ urlpatterns = [
     path('order_success/', views.successMsg, name='successMsg'),
     path('api/cart/', views.cart_api, name='api-cart-detail'),
     path('api/add-to-cart/', views.add_to_cart_api, name='api-add-to-cart'),
+    path('api/remove-from-cart/', views.remove_from_cart_api, name='api-add-to-cart'),
+    path('api/delete-from-cart/', views.delete_from_cart_api, name='api-add-to-cart'),
     path('api/user_orders/', UserOrdersAPIView.as_view(), name='user_orders_api'),
-    # path('add-to-cart/<int:product_id>/', AddToCartAPI.as_view(), name='add_to_cart_api'),
     path('api/products/<int:product_id>/', views.product_detail_view, name='product-detail'),
     path('api/products/', views.product_list, name='product-list'),
     path('api/profile/', CustomerProfileView.as_view(), name='profile_api'),
-    # path('api/login/', LoginAPIView.as_view(), name='login'),
     path('api/update_profile/', views.update_profile_api, name='update_profile_api'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('all-order/', views.all_order, name='all-order'),
-    path("simple_chatbot/", SimpleChatbot.as_view())
+    path('api/token/refresh/', views.csrf_exempt_token_refresh_view, name='token_refresh')
     
 ]

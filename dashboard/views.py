@@ -12,6 +12,10 @@ def dash_index(request):
         check = check_d.order.id
         orders = Order.objects.all()
         full_order_details.extend(orders)
+        # g =full_order_details.total_price
+        for prod in full_order_details:
+            b = prod.total_price
+            print(b)
     context = {'order_delivery': order_delivery, 'full_order_details': full_order_details}
     return render(request, 'dashboard/index.html', context)
 
@@ -26,6 +30,14 @@ def add_product(request):
         form = ProductForm()
     context = {'form':form}
     return render(request,'dashboard/product-add.html',context)
+
+
+
+def product_list(request):
+    all_products = Product.objects.all()
+    context={'all_products':all_products}
+    return render(request,'dashboard/product-list.html',context)
+
 
 
 def create_category(request):

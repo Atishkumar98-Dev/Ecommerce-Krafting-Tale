@@ -1,4 +1,3 @@
-# from django.db import models
 
 # Create your models here.
 from django.db import models
@@ -42,12 +41,12 @@ class Product(models.Model):
         return self.name
 
 
-class ProductVariant(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    variant_name = models.CharField(max_length=255)
-    variant_price = models.DecimalField(max_digits=10, decimal_places=2)
-    variant_quantity = models.PositiveIntegerField(default=0)
-    # image = models.ImageField(null=True)
+# class ProductVariant(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     variant_name = models.CharField(max_length=255)
+#     variant_price = models.DecimalField(max_digits=10, decimal_places=2)
+#     variant_quantity = models.PositiveIntegerField(default=0)
+#     image = models.ImageField(null=True)
 
 
 
@@ -128,7 +127,7 @@ class Delivery(models.Model):
 
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.TextField()
+    address = models.TextField()    
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     delivery_date = models.DateTimeField(auto_now=True)
     notes = models.TextField(blank=True, null=True,default='Will be Arriving Soon')

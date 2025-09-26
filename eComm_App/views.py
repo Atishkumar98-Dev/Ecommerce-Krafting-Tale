@@ -2,12 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import razorpay
+
+
+from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.views import TokenRefreshView
 import datetime
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .utils import get_plot
-from .models import Product, Order, OrderItem, ProductVariant,Customer,Category,Delivery,Refund
+from .models import Product, Order, OrderItem,Customer,Category,Delivery,Refund
 from .serializers import OrderItemSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
@@ -181,12 +186,14 @@ def upload_csv(request):
 
 
 
+@csrf_exempt
 def loginpage(request):
 
     if request.method == "POST" and 'form1' in request.POST:
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        ## Redirect user to Dashboard if Superuser
         # if user.is_superuser:
         #     print('superuser')
         #     login(request, user)
@@ -269,39 +276,6 @@ def home(request):
 
 
 
-
-
-# @api_view(['GET', 'POST'])
-# # @permission_classes([IsAuthenticated])
-# def cart_api(request):
-#     if request.method == 'GET':
-#         order = Order.objects.filter(customer=request.user.customer, status='Pending').first()
-#         serializer = OrderSerializer(order)
-#         return Response(serializer.data)
-#     elif request.method == 'POST':
-#         serializer = OrderSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors)
-
-
-
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def cart_detail_view(request):
-#     try:
-#         # Ensure the user is authenticated and has a customer profile
-#         if not hasattr(request.user, 'customer'):
-#             return Response({'message': 'User does not have a customer profile'}, status=400)
-
-#         order = Order.objects.get(customer=request.user.customer, status='Pending')
-#         serializer = OrderSerializer(order)
-#         return Response(serializer.data)
-#     except Order.DoesNotExist:
-#         return Response({'message': 'No active order found'}, status=404)
-
 @api_view(['GET'])
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
@@ -350,6 +324,7 @@ def cart_api(request):
                 'quantity': item.quantity,
                 'name': product_variant.name,
                 'price': product_variant.price,
+                'image': product_variant.image.url,
                 'image_url': product_variant.image_url,
             })
 
@@ -386,7 +361,56 @@ def add_to_cart_api(request):
     # Serialize the order item to return it as a response
     serializer = OrderItemSerializer(order_item)
     return Response(serializer.data)
-    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_from_cart_api(request):
+    product_id = request.data.get('product_id')
+
+    # Get the pending order for the user
+    order = get_object_or_404(Order, customer=request.user.customer, status='Pending')
+
+    # Get the product, or return a 404 error if it doesn't exist
+    product = get_object_or_404(Product, pk=product_id)
+
+    try:
+        # Try to get the order item
+        order_item = OrderItem.objects.get(order=order, product_variant=product)
+
+        if order_item.quantity > 1:
+            # Decrease the quantity
+            order_item.quantity -= 1
+            order_item.save()
+        else:
+            # If the quantity is 1, delete the item
+            order_item.delete()
+
+        return Response({'detail': 'Item quantity updated or removed successfully'}, status=status.HTTP_200_OK)
+
+    except OrderItem.DoesNotExist:
+        return Response({'detail': 'Item not found in cart'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_from_cart_api(request):
+    product_id = request.data.get('product_id')
+
+    # Get the pending order for the user
+    order = get_object_or_404(Order, customer=request.user.customer, status='Pending')
+
+    # Get the product, or return a 404 error if it doesn't exist
+    product = get_object_or_404(Product, pk=product_id)
+
+    try:
+        # Try to get the order item
+        order_item = OrderItem.objects.get(order=order, product_variant=product)
+        order_item.delete()
+        return Response({'detail': 'Item removed from cart successfully'}, status=status.HTTP_200_OK)
+
+    except OrderItem.DoesNotExist:
+        return Response({'detail': 'Item not found in cart'}, status=status.HTTP_404_NOT_FOUND)
+
 
     
 @login_required(login_url='/login/')
@@ -466,17 +490,6 @@ def cart_view(request):
         total_price += item_price
 
     return render(request, 'cart.html', {'order_items': order_items, 'total_price': total_price})
-    # if request.accepted_renderer.format == 'html':
-        # Render HTML for regular views
-    # else:
-    # #     # Serialize data for API views
-    #     serializer = OrderItemSerializer(order_items, many=True)
-    #     return Response({'order_items': serializer.data, 'total_price': total_price})
-
-# Other views...
-
-# Make sure to replace 'your_app_name' with the actual name of your Django app.
-# ... (Previous code)
 
 def reduce_quantity(request, item_id):
     order_item = get_object_or_404(OrderItem, pk=item_id)
@@ -516,6 +529,7 @@ def checkout(request):
     client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_SECRET_KEY))
     customer = request.user.customer
 
+    # get or create pending order for this customer
     try:
         order, created = Order.objects.get_or_create(customer=customer, status='Pending')
     except Order.MultipleObjectsReturned:
@@ -529,8 +543,8 @@ def checkout(request):
     for item in order_items:
         if item.product_variant.price is not None:
             prod_price = item.product_variant.price
-            Price = int(prod_price)
-            item_quantity = item.quantity if item.quantity is not None and item.quantity > 0 else 1
+            Price = int(prod_price)               # rupees
+            item_quantity = item.quantity if item.quantity and item.quantity > 0 else 1
             item_price = Price * item_quantity
             total_price += item_price
             item.item_price = Price
@@ -539,21 +553,31 @@ def checkout(request):
         else:
             pass
 
-    if total_price != 0:
+    razor_pay_order = None
+    # Create Razorpay order only if total_price > 0
+    if total_price and total_price > 0:
+        # Razorpay expects amount in paise
+        razor_amount = int(total_price * 100)  # rupees -> paise
         razor_pay_order = client.order.create({
-            'amount': int(total_price),
+            'amount': razor_amount,
             'currency': 'INR',
             'payment_capture': 1
         })
-        order.transaction_id = razor_pay_order['id']
+        # Save transaction id returned by Razorpay order
+        order.transaction_id = razor_pay_order.get('id')
         order.total_price = total_price
-        order.delivery_address = customer.shipping_address
+        order.delivery_address = getattr(customer, 'shipping_address', '') or ''
         order.save()
 
-    return render(request, 'checkout.html', {'order': order, 'total_price': total_price, 'razor_pay_order': razor_pay_order,'customer':customer})
-
-
-
+    # Pass the public key to template so JS can open Razorpay checkout
+    context = {
+        'order': order,
+        'total_price': total_price,
+        'razor_pay_order': razor_pay_order,
+        'customer': customer,
+        'razorpay_key': settings.RAZORPAY_API_KEY,
+    }
+    return render(request, 'checkout.html', context)
 
 
 
@@ -633,7 +657,6 @@ def delivery_status_update(request, order_id):
 
     return render(request, 'delivery_status_update.html', {'form': form, 'order_id': order_id})
 
-
 @login_required(login_url='/login/')
 def user_orders(request):
     user_orders = Order.objects.filter(customer=request.user.customer).exclude(status='Pending').prefetch_related('orderitem_set__product_variant').order_by('-id')
@@ -647,6 +670,7 @@ def user_orders(request):
         user_orders = paginator.page(paginator.num_pages) 
     order_items = OrderItem.objects.filter(order__in=user_orders)
     return render(request, 'user_orders.html', {'user_orders': user_orders, 'order_item': order_items})
+
 
 
 
@@ -735,31 +759,6 @@ def update_profile_api(request):
 
 
 
-
-
-@login_required(login_url='/login/')
-# def dashboard(request):
-#     now = datetime.datetime.now()
-#     format = '%H:%M:%S %p'
-#     current_time = now.strftime(format)
-#     current_date = now.strftime("%d-%m-%Y")
-#     qs = Product.objects.all()
-#     # _main = int(price_graph.price for price_graph in qs)
-#     x = [x.name for x in qs]
-#     y = [y.price for y in qs]
-#     chart = get_plot(x, y)
-#     cust = Customer.objects.all()
-#     prod = Product.objects.all()
-#     cat = Category.objects.all()
-#     ord = Order.objects.filter(customer=request.user.customer).exclude(status='Pending').prefetch_related('orderitem_set__product_variant')
-#     cust_count   = Customer.objects.count()
-#     prod_count   = Product.objects.count()
-#     cat_count    = Category.objects.count()
-#     ord_count    = OrderItem.objects.count()
-#     context = {'cc': cat, 'name': cust, 'prod': prod,'ord':ord, 'x': x, 'y': y,
-#                'time': current_time, 'day': current_date,'cust_count':cust_count,'prod_count':prod_count,'cat_count':cat_count,'ord_count':ord_count}
-#     return render(request, 'dashboard.html', context)
-
 def dashboard(request):
     now = datetime.datetime.now()
     format = '%H:%M:%S %p'
@@ -833,3 +832,10 @@ def contact_us(request):
 #     })
 #     context = {}
 #     return render(request,context)
+
+
+
+
+@csrf_exempt
+def csrf_exempt_token_refresh_view(request, *args, **kwargs):
+    return TokenRefreshView.as_view()(request, *args, **kwargs)

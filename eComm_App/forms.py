@@ -21,7 +21,7 @@ class ProductFilterForm(forms.Form):
         label="Search",
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+    )   
 
 
 

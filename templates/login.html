@@ -20,7 +20,7 @@ body:before {
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
-	background-image: url('../static/images/image-1.jpg');
+	background-image: url('../static/images/background.jpg');
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
@@ -29,6 +29,17 @@ body:before {
 	-webkit-filter: blur(10px);
 	-moz-filter: blur(10px);
 	filter: blur(10px);
+}
+.logo{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5%;
+
+}
+.logo img{
+  width: 25%;
 }
 
 .login_page{
@@ -84,6 +95,9 @@ body:before {
     {% endfor %}
   </ul>
 {% endif %}
+<div class="logo">
+  <img src="../static/images/circle-logo.png" alt="">
+</div>
                 <h1>Login Page</h1>
                 <form method="POST" action=""> {% csrf_token %}
                     <div class="">

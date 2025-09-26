@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eComm_App',
     'corsheaders',
+    'rest_framework',
     'dashboard',
-    'simple_chatbot',
-    'rest_framework'
+    'simple_chatbot'
 ]
 SIMPLE_CHATBOT = {
     'responses': (
@@ -54,12 +54,12 @@ SIMPLE_CHATBOT = {
     ),
 }
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19006",  # Local development
-    "http://192.168.0.130:19006", 
-    'http://localhost:8055',
-    "http://13.233.101.242:8055",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:19006",  # Local development
+#     "http://192.168.0.130:19006", 
+#     'http://localhost:8055',
+#     "http://13.233.101.242:8055",
+# ]
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -68,6 +68,11 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+# settings.py
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
+SESSION_COOKIE_AGE = 1209600  # Two weeks
+SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Set to True if you want the session to expire when the browser is closed
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -101,7 +106,7 @@ REST_FRAMEWORK = {
 
 ROOT_URLCONF = 'eComm_Main.urls'
 # settings.py
-SESSION_COOKIE_AGE = 3  # 2 weeks in seconds (adjust as needed)
+SESSION_COOKIE_AGE = 10  # 2 weeks in seconds (adjust as needed)
 
 TEMPLATES = [
     {

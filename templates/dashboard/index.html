@@ -1,109 +1,266 @@
 {% extends 'dashboard/base.html' %}
-{% block title %} Dashboard Home {% endblock title %}
+{% block title %}Admin Dashboard{% endblock %}
+
 {% block content %}
 <style>
-    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6f9;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header h1 {
+    font-weight: 700;
+    color: #333;
+  }
+
+  .kpi-card {
+    border-radius: 12px;
+    padding: 2rem;
     color: #fff;
-    background-color: #000;
-}
-.nav-link {
-    color:#000;
-}
-.common-card-for-money {
-    background-color: cadetblue;
-    color: white;
-    border: none;
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-}
+    transition: transform 0.3s;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+  }
+
+  .kpi-icon {
+    font-size: 2.5rem;
+    opacity: 0.7;
+  }
+
+  .progress {
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+  }
+
+  .section-title {
+    margin: 2rem 0 1rem;
+    font-weight: 600;
+    color: #555;
+  }
+
+  #map {
+    height: 350px;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .notification-card {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dashboard-btn {
+    transition: 0.3s;
+    margin-bottom: 1rem;
+  }
+
+  .dashboard-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
 </style>
-<div class="container mt-5 ">
 
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Orders</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
-                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Product</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
-                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Delivery</button>
-        </li>
-    </ul>
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-            
-            <div class=" d-flex col">
+<div class="container mt-4">
 
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-           
-            <div class=" d-flex col">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button class="btn btn-primary">Generate Report</button>
+  </div>
 
-                <div class="card m-3 p-5 common-card-for-money">
-                   <a  style="text-decoration: none;color: #fff;" href = '{% url  "product-additon" %}'>
-
-                       <div class="card-body ">
-                           Add Product
-                        </div>
-                    </a>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <a style="text-decoration: none;color: #fff;"  href = '{% url  "category-additon" %}'>
-                    <div class="card-body ">
-                       Add Category
-                    </div>
-                </a>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <a style="text-decoration: none;color: #fff;"  href = '{% url  "brand-additon" %}'>
-                    <div class="card-body ">
-                        Add Brand
-                    </div>
-                </a>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-           
-            <div class=" d-flex col">
-
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-                <div class="card m-3 p-5 common-card-for-money">
-                    <div class="card-body ">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-
-        </div>
+  <!-- KPI Cards -->
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="kpi-card bg-primary text-center">
+        <i class='bx bxs-shopping-bag kpi-icon'></i>
+        <h3 class="mt-3" id="total-orders">120</h3>
+        <p>Total Orders</p>
+      </div>
     </div>
+    <div class="col-md-3">
+      <div class="kpi-card bg-success text-center">
+        <i class='bx bxs-cart kpi-icon'></i>
+        <h3 class="mt-3" id="total-sales">$12,400</h3>
+        <p>Total Revenue</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="kpi-card bg-warning text-center">
+        <i class='bx bxs-package kpi-icon'></i>
+        <h3 class="mt-3" id="total-products">45</h3>
+        <p>Total Products</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="kpi-card bg-danger text-center">
+        <i class='bx bxs-truck kpi-icon'></i>
+        <h3 class="mt-3" id="pending-deliveries">8</h3>
+        <p>Pending Deliveries</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <a href="{% url 'product-additon' %}" class="btn btn-outline-primary w-100 dashboard-btn">Add Product</a>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'category-additon' %}" class="btn btn-outline-success w-100 dashboard-btn">Add Category</a>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'brand-additon' %}" class="btn btn-outline-warning w-100 dashboard-btn">Add Brand</a>
+    </div>
+  </div>
+
+  <!-- Charts -->
+<div class="row mt-5 g-4">
+  <div class="col-lg-6">
+    <h5 class="section-title">Orders Status</h5>
+    <div style="height:250px;">
+      <canvas id="ordersChart"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <h5 class="section-title">Delivery Status</h5>
+    <div style="height:250px;">
+      <canvas id="deliveryChart"></canvas>
+    </div>
+  </div>
 </div>
-{% endblock content %}
+
+
+  <!-- Stock Levels -->
+  <div class="row mt-5">
+    <h5 class="section-title">Product Stock Levels</h5>
+    <div class="col-md-12">
+      <p>Product A</p>
+      <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+      </div>
+      <p>Product B</p>
+      <div class="progress">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"></div>
+      </div>
+      <p>Product C</p>
+      <div class="progress">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: 10%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="row mt-5">
+    <h5 class="section-title">Delivery Locations</h5>
+    <div class="col-md-12">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="row mt-5">
+    <h5 class="section-title">Notifications / Alerts</h5>
+    <div class="col-md-12">
+      <div class="notification-card">
+        <span>Stock low for Product C!</span>
+        <i class='bx bx-bell'></i>
+      </div>
+      <div class="notification-card">
+        <span>New order received: Order #101</span>
+        <i class='bx bx-bell'></i>
+      </div>
+      <div class="notification-card">
+        <span>Delivery delayed: Order #97</span>
+        <i class='bx bx-bell'></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Charts JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+ const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+  const ordersChart = new Chart(ordersCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Pending', 'Processing', 'Completed', 'Cancelled'],
+      datasets: [{
+        label: 'Orders',
+        data: [10, 15, 70, 5],
+        backgroundColor: ['#f6c23e','#36b9cc','#1cc88a','#e74a3b']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 10 } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+  const deliveryChart = new Chart(deliveryCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Pending','In Transit','Delivered'],
+      datasets: [{
+        label: 'Delivery Status',
+        data: [12,5,20],
+        backgroundColor: ['#f6c23e','#36b9cc','#1cc88a'],
+        hoverOffset: 10
+      }]
+    },
+    options: { 
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+</script>
+
+<!-- Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const map = L.map('map').setView([20.5937, 78.9629], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const deliveries = [
+      {lat: 28.7041, lng: 77.1025, order: 'Order #1001'},
+      {lat: 19.0760, lng: 72.8777, order: 'Order #1002'},
+      {lat: 13.0827, lng: 80.2707, order: 'Order #1003'}
+  ];
+
+  deliveries.forEach(d => {
+      L.marker([d.lat, d.lng]).addTo(map)
+          .bindPopup(d.order)
+          .openPopup();
+  });
+</script>
+{% endblock %}

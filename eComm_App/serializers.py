@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Product, Order, OrderItem, ProductVariant, Customer, Category
+from .models import Product, Order, OrderItem, Customer, Category
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.views import APIView
@@ -16,16 +16,32 @@ from rest_framework.response import Response
 #         # Add your logic for adding the product to the cart
 #         return Response({"message": "Product added to cart successfully."}, status=status.HTTP_200_OK)
 
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    # image = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'price', 'discount_price', 'actual_price', 
+                  'image', 'brand', 'category', 'sub_category', 'slug', 
+                  'stock_quantity', 'ratings', 'no_of_ratings']
+    
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            print(obj.image.url)
+            return request.build_absolute_uri(obj.image.url)
+        return None
+
+
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product_variant = ProductSerializer()
     class Meta:
         model = OrderItem
         fields = ['id', 'quantity', 'item_price', 'product_variant']
+
+
 
 class OrderSerializer(serializers.ModelSerializer):
     orderitem_set = OrderItemSerializer(many=True, read_only=True)
@@ -34,10 +50,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
-class ProductVariantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductVariant
-        fields = '__all__'
+
+
 
 class CustomerSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
@@ -55,11 +69,21 @@ class CustomerSerializer(serializers.ModelSerializer):
             return photo_url
         return None
 
+
+
+
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-#
+
+
+
+
+
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         authenticate_kwargs = {
@@ -77,23 +101,3 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add more data to the payload if needed
 
         return data
-# Login Serializers
-
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField()
-#     password = serializers.CharField(write_only=True)
-
-#     def validate(self, data):
-#         username = data.get("username")
-#         password = data.get("password")
-#         if username and password:
-#             user = authenticate(username=username, password=password)
-#             if user:
-#                 if not user.is_active:
-#                     raise serializers.ValidationError("User is deactivated.")
-#             else:
-#                 raise serializers.ValidationError("Unable to log in with provided credentials.")
-#         else:
-#             raise serializers.ValidationError("Must include 'username' and 'password'.")
-#         data['user'] = user
-#         return data
