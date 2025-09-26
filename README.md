@@ -174,16 +174,6 @@ krafting-tale/
 
 ---
 
-## Screenshots
-
-*(Include screenshots of the following)*
-
-* Home page with products
-* Cart page with interactive quantity buttons
-* Checkout page with product images and order summary
-* Order history page with delivery status
-
----
 
 ## Contributing
 
